@@ -30,7 +30,6 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
