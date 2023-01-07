@@ -12,7 +12,7 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('第二画面')),
+      appBar: AppBar(title: const Text('設定画面')),
       body: SingleChildScrollView(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -24,8 +24,8 @@ class _SettingScreenState extends State<SettingScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 1,
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(label:'1画面', icon: Icon(Icons.home)),
-          BottomNavigationBarItem(label:'2画面', icon: Icon(Icons.settings)),
+          BottomNavigationBarItem(label:'タイマー', icon: Icon(Icons.timer)),
+          BottomNavigationBarItem(label:'設定', icon: Icon(Icons.settings)),
         ],
         onTap: (int index) {
           if (index == 0) {Navigator.pushNamed(context, '/');}

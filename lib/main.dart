@@ -44,8 +44,8 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(label:'1画面', icon: Icon(Icons.home)),
-          BottomNavigationBarItem(label:'2画面', icon: Icon(Icons.settings)),
+          BottomNavigationBarItem(label:'タイマー', icon: Icon(Icons.timer)),
+          BottomNavigationBarItem(label:'設定', icon: Icon(Icons.settings)),
         ],
         onTap: (int index) {
           if (index == 1) {Navigator.pushNamed(context, '/setting');}
