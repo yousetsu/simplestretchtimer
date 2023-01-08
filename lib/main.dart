@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
+import 'package:flutter_beep/flutter_beep.dart';
 import './setting.dart';
 import './const.dart';
 List<Widget> _items = <Widget>[];
@@ -185,9 +186,6 @@ class _MainScreenState extends State<MainScreen> {
         builder: (_) {
           return AwesomeDialog(listTitle,listTime,listOtherSide);
         },
-
-
-
     );
   }
   /*------------------------------------------------------------------
@@ -233,6 +231,7 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
   DateTime dtCntTime = DateTime.now();
   Timer? timer;
   bool playFlg = true;
+  bool otherFlg = false;
 
   _AwesomeDialogState(this.aweDialogTitle, this.aweDialogTime ,this.aweDialogOtherSide);
 
@@ -283,8 +282,35 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
     if(playFlg) {
       dtCntTime = dtCntTime.subtract(Duration(seconds: 1));
     }
-    setState(() => {
-      strTime = '${dtCntTime.minute.toString().padLeft(2,'0')}分 ${dtCntTime.second.toString().padLeft(2,'0')}秒'
-    });
+
+    if(dtCntTime.minute <= 0 && dtCntTime.second <= 0){
+
+      debugPrint('時間経過！');
+      FlutterBeep.beep();
+      if(aweDialogOtherSide == cnsOtherSideOff){
+        timer?.cancel();
+        Navigator.pop(context);
+      }else{
+        if(otherFlg == true){
+          timer?.cancel();
+          Navigator.pop(context);
+        }else{
+          otherFlg = true;
+          setState(() => {
+            aweDialogTitle = '$aweDialogTitle(反対側)',
+            dtCntTime = DateTime.parse(aweDialogTime),
+            strTime = '${dtCntTime.minute.toString().padLeft(2,'0')}分 ${dtCntTime.second.toString().padLeft(2,'0')}秒'
+          });
+
+        }
+
+      }
+
+    }else{
+      setState(() => {
+        strTime = '${dtCntTime.minute.toString().padLeft(2,'0')}分 ${dtCntTime.second.toString().padLeft(2,'0')}秒'
+      });
+    }
+
   }
 }
