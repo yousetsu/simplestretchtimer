@@ -134,6 +134,8 @@ class _MainScreenState extends State<MainScreen> {
       }else{
         strOtherSideText = '';
       }
+      dtTime = DateTime.parse(item['time']);
+      strTimeText = '${dtTime.minute.toString().padLeft(2,'0')}分${dtTime.second.toString().padLeft(2,'0')}秒';
 
       list.add(
           ListTile(
@@ -170,26 +172,8 @@ class _MainScreenState extends State<MainScreen> {
           return AwesomeDialog(listTitle,listTime,listOtherSide);
         },
 
-        // builder: (BuildContext context) => AlertDialog(
-        //   title:  Text(listTitle,style:  TextStyle( fontSize: 18)),
-        //   content: StatefulBuilder(
-        //       builder: (BuildContext context, StateSetter setState)
-        //       {
-        //         return Row(
-        //             children:<Widget>[
-        //           Text('$strTime', style: TextStyle(fontSize: 30, color: Colors.blue)),
-        //
-        //         ]);
-        //       }
-        //   ),
-        //
-        //   actions: <Widget>[
-        //     TextButton(
-        //         child: Text('閉じる'),
-        //         onPressed: () => Navigator.pop<String>(context, 'Yes')),
-        //
-        //   ],
-        // )
+
+
     );
   }
   /*------------------------------------------------------------------
@@ -233,6 +217,7 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
   String aweDialogTime = '';
   int aweDialogOtherSide = 0;
   DateTime dtCntTime = DateTime.now();
+  Timer? timer;
 
   _AwesomeDialogState(this.aweDialogTitle, this.aweDialogTime ,this.aweDialogOtherSide);
 
@@ -240,19 +225,39 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
   void initState() {
     super.initState();
      dtCntTime = DateTime.parse(aweDialogTime);
-    Timer.periodic(Duration(seconds: 1), _onTimer);
+    timer = Timer.periodic(Duration(seconds: 1), _onTimer);
   }
 
   @override
   Widget build(BuildContext context) {
-    return SimpleDialog(
+    return AlertDialog(
       title: Text(this.aweDialogTitle),
-      children: <Widget>[
-        Text(strTime),
+      content: Row(
+          children:<Widget>[
+            Text('$strTime', style: TextStyle(fontSize: 30, color: Colors.blue)),
+          ]),
+      actions: <Widget>[
+        TextButton(
+            child: Text('一時停止'),
+            onPressed: () => resultAlert('pause')),
+        TextButton(
+            child: Text('中止'),
+            onPressed: () => resultAlert('stop')),
       ],
     );
   }
-
+  void resultAlert(String value) {
+    setState(() {
+      switch (value) {
+        case 'pause':
+          break;
+        case 'stop':
+          timer?.cancel();
+          Navigator.pop(context);
+          break;
+      }
+    });
+  }
 
   /*------------------------------------------------------------------
 リアルタイムカウントダウン
