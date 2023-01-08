@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 import './setting.dart';
+import './const.dart';
 List<Widget> _items = <Widget>[];
 List<Map> map_stretchlist = <Map>[];
 /*------------------------------------------------------------------
@@ -109,26 +110,40 @@ class _MainScreenState extends State<MainScreen> {
   }
   Future<void> getItems() async {
     List<Widget> list = <Widget>[];
+
+    String strOtherSideText = '';
+    String strTimeText = '';
+    DateTime dtTime = DateTime.now();
+
     //アチーブメントユーザーマスタから達成状況をロード
     //  achievementUserMap = await  _loadAchievementUser();
 
-    debugPrint('ループスタート');
     for (Map item in map_stretchlist) {
 
-      debugPrint('title:${item['title']}');
+      //反対側ありなし判定
+      if( item['otherside'] == cnsOtherSideOn) {
+        strOtherSideText = 'ずつ';
+      }else{
+        strOtherSideText = '';
+      }
 
+      //時間の整形
+      dtTime = DateTime.parse(item['time']);
+
+      strTimeText = '${dtTime.minute.toString().padLeft(2,'0')}分${dtTime.second.toString().padLeft(2,'0')}秒';
       list.add(
           ListTile(
             //tileColor: Colors.grey,
             // tileColor: (item['getupstatus'].toString() == cnsGetupStatusS)
             //     ? Colors.green
             //     : Colors.grey,
-            // leading: boolAchieveReleaseFlg
-            //     ? const Icon(Icons.star, color: Colors.blue, size: 18,)
-            //     : const Icon(Icons.star_border, size: 18,),
-            title: Text('${item['title']} ${item['time']} ${item['otherside']}',
-              style: TextStyle(color: Colors.black , fontSize: 13),),
-            dense: true,
+            //  leading: boolAchieveReleaseFlg
+            //      ? const Icon(Icons.play_circle, color: Colors.blue, size: 18,)
+            //      : const Icon(Icons.stop_circle, size: 18,),
+            title: Text('${item['title']}  ', style: TextStyle(color: Colors.black , fontSize: 20),),
+            subtitle: Row(children:  <Widget>[Text('$strTimeText ', style: TextStyle(color: Colors.black , fontSize: 25) ), Text('$strOtherSideText', style: TextStyle(color: Colors.black , fontSize: 15),)] ),
+
+              dense: true,
             // selected: listNo == item['No'],
             // onTap: () {
             //   listNo = item['No'];
