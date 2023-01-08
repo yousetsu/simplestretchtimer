@@ -218,6 +218,7 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
   int aweDialogOtherSide = 0;
   DateTime dtCntTime = DateTime.now();
   Timer? timer;
+  bool playFlg = true;
 
   _AwesomeDialogState(this.aweDialogTitle, this.aweDialogTime ,this.aweDialogOtherSide);
 
@@ -250,6 +251,7 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
     setState(() {
       switch (value) {
         case 'pause':
+          playFlg = !playFlg;
           break;
         case 'stop':
           timer?.cancel();
@@ -264,8 +266,9 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
  -------------------------------------------------------------------*/
   void _onTimer(Timer timer) {
 
-    dtCntTime = dtCntTime.subtract(Duration(seconds: 1));
-
+    if(playFlg) {
+      dtCntTime = dtCntTime.subtract(Duration(seconds: 1));
+    }
     setState(() => {
       strTime = '${dtCntTime.minute.toString().padLeft(2,'0')}分 ${dtCntTime.second.toString().padLeft(2,'0')}秒'
     });
