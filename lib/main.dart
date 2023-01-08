@@ -9,6 +9,9 @@ import './setting.dart';
 import './const.dart';
 List<Widget> _items = <Widget>[];
 List<Map> map_stretchlist = <Map>[];
+
+String strTime = '';
+DateTime dtCntTime = DateTime.now();
 /*------------------------------------------------------------------
 全共通のメソッド
  -------------------------------------------------------------------*/
@@ -45,6 +48,8 @@ void main() async{
   runApp(const MyApp());
 }
 
+
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
@@ -66,13 +71,12 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
 
-  String strTime = '';
-  DateTime dtCntTime = DateTime.now();
   @override
   void initState() {
     super.initState();
     init();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -172,43 +176,37 @@ class _MainScreenState extends State<MainScreen> {
 
     showDialog(
         context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title:  Text(listTitle,style:  TextStyle( fontSize: 18)),
-          content: StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState)
-              {
-                return Row(
-                    children:<Widget>[
-                  Text(strTime, style: TextStyle(fontSize: 30, color: Colors.blue))
-                ]);
-              }
-          ),
+        builder: (_) {
+          return AwesomeDialog();
+        },
 
-          actions: <Widget>[
-            TextButton(
-                child: Text('閉じる'),
-                onPressed: () => Navigator.pop<String>(context, 'Yes')),
-          ],
-        )
+        // builder: (BuildContext context) => AlertDialog(
+        //   title:  Text(listTitle,style:  TextStyle( fontSize: 18)),
+        //   content: StatefulBuilder(
+        //       builder: (BuildContext context, StateSetter setState)
+        //       {
+        //         return Row(
+        //             children:<Widget>[
+        //           Text('$strTime', style: TextStyle(fontSize: 30, color: Colors.blue)),
+        //
+        //         ]);
+        //       }
+        //   ),
+        //
+        //   actions: <Widget>[
+        //     TextButton(
+        //         child: Text('閉じる'),
+        //         onPressed: () => Navigator.pop<String>(context, 'Yes')),
+        //
+        //   ],
+        // )
     );
 
 
-    Timer.periodic(Duration(seconds: 1), _onTimer);
-  }
-  /*------------------------------------------------------------------
-リアルタイムカウントダウン
- -------------------------------------------------------------------*/
-  void _onTimer(Timer timer) {
-
-    dtCntTime = dtCntTime.subtract(Duration(seconds: 1));
-
-    debugPrint(dtCntTime.toString());
-    debugPrint(strTime.toString());
-    setState(() => {
-       strTime = '${dtCntTime.minute.toString().padLeft(2,'0')}分 ${dtCntTime.second.toString().padLeft(2,'0')}秒'
-     });
 
   }
+
+
   /*------------------------------------------------------------------
 第一画面ロード
  -------------------------------------------------------------------*/
@@ -229,4 +227,45 @@ class _MainScreenState extends State<MainScreen> {
     await getItems();
   }
 
+}
+/*------------------------------------------------------------------
+Statefulなダイアログ
+ -------------------------------------------------------------------*/
+class AwesomeDialog extends StatefulWidget {
+  @override
+  _AwesomeDialogState createState() => _AwesomeDialogState();
+}
+
+class _AwesomeDialogState extends State<AwesomeDialog> {
+
+  @override
+  void initState() {
+    super.initState();
+    Timer.periodic(Duration(seconds: 1), _onTimer);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      title: const Text('It says'),
+      children: <Widget>[
+        Text(strTime),
+      ],
+    );
+  }
+
+
+  /*------------------------------------------------------------------
+リアルタイムカウントダウン
+ -------------------------------------------------------------------*/
+  void _onTimer(Timer timer) {
+
+    dtCntTime = dtCntTime.subtract(Duration(seconds: 1));
+
+    debugPrint(dtCntTime.toString());
+    debugPrint(strTime.toString());
+    setState(() => {
+      strTime = '${dtCntTime.minute.toString().padLeft(2,'0')}分 ${dtCntTime.second.toString().padLeft(2,'0')}秒'
+    });
+  }
 }
