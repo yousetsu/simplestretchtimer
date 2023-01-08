@@ -10,8 +10,7 @@ import './const.dart';
 List<Widget> _items = <Widget>[];
 List<Map> map_stretchlist = <Map>[];
 
-String strTime = '';
-DateTime dtCntTime = DateTime.now();
+
 /*------------------------------------------------------------------
 全共通のメソッド
  -------------------------------------------------------------------*/
@@ -47,8 +46,6 @@ void main() async{
   await firstRun();
   runApp(const MyApp());
 }
-
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -138,10 +135,6 @@ class _MainScreenState extends State<MainScreen> {
         strOtherSideText = '';
       }
 
-      //時間の整形
-      dtTime = DateTime.parse(item['time']);
-
-      strTimeText = '${dtTime.minute.toString().padLeft(2,'0')}分${dtTime.second.toString().padLeft(2,'0')}秒';
       list.add(
           ListTile(
             //tileColor: Colors.grey,
@@ -171,13 +164,10 @@ class _MainScreenState extends State<MainScreen> {
   }
   void _tapTile(String listTitle ,String listTime, int listOtherSide) {
 
-     dtCntTime = DateTime.parse(listTime);
-     strTime = '${dtCntTime.minute.toString().padLeft(2,'0')}分 ${dtCntTime.second.toString().padLeft(2,'0')}秒';
-
     showDialog(
         context: context,
         builder: (_) {
-          return AwesomeDialog();
+          return AwesomeDialog(listTitle,listTime,listOtherSide);
         },
 
         // builder: (BuildContext context) => AlertDialog(
@@ -201,12 +191,7 @@ class _MainScreenState extends State<MainScreen> {
         //   ],
         // )
     );
-
-
-
   }
-
-
   /*------------------------------------------------------------------
 第一画面ロード
  -------------------------------------------------------------------*/
@@ -232,22 +217,36 @@ class _MainScreenState extends State<MainScreen> {
 Statefulなダイアログ
  -------------------------------------------------------------------*/
 class AwesomeDialog extends StatefulWidget {
+  String dialogTitle = '';
+  String dialogTime = '';
+  int dialogOtherSide = 0;
+
+  AwesomeDialog(this.dialogTitle, this.dialogTime ,this.dialogOtherSide);
+
   @override
-  _AwesomeDialogState createState() => _AwesomeDialogState();
+  _AwesomeDialogState createState() => _AwesomeDialogState(dialogTitle, dialogTime ,dialogOtherSide);
 }
 
 class _AwesomeDialogState extends State<AwesomeDialog> {
+  String strTime = '';
+  String aweDialogTitle = '';
+  String aweDialogTime = '';
+  int aweDialogOtherSide = 0;
+  DateTime dtCntTime = DateTime.now();
+
+  _AwesomeDialogState(this.aweDialogTitle, this.aweDialogTime ,this.aweDialogOtherSide);
 
   @override
   void initState() {
     super.initState();
+     dtCntTime = DateTime.parse(aweDialogTime);
     Timer.periodic(Duration(seconds: 1), _onTimer);
   }
 
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      title: const Text('It says'),
+      title: Text(this.aweDialogTitle),
       children: <Widget>[
         Text(strTime),
       ],
@@ -262,8 +261,6 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
 
     dtCntTime = dtCntTime.subtract(Duration(seconds: 1));
 
-    debugPrint(dtCntTime.toString());
-    debugPrint(strTime.toString());
     setState(() => {
       strTime = '${dtCntTime.minute.toString().padLeft(2,'0')}分 ${dtCntTime.second.toString().padLeft(2,'0')}秒'
     });
