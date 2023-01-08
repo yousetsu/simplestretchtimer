@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -65,8 +66,8 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
 
-
-
+  String strTime = '';
+  DateTime dtCntTime = DateTime.now();
   @override
   void initState() {
     super.initState();
@@ -165,17 +166,48 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {_items = list;});
   }
   void _tapTile(String listTitle ,String listTime, int listOtherSide) {
+
+     dtCntTime = DateTime.parse(listTime);
+     strTime = '${dtCntTime.minute.toString().padLeft(2,'0')}分 ${dtCntTime.second.toString().padLeft(2,'0')}秒';
+
     showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
           title:  Text(listTitle,style:  TextStyle( fontSize: 18)),
-          content: Text(listTime,style:  TextStyle( fontSize: 12)),
+          content: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState)
+              {
+                return Row(
+                    children:<Widget>[
+                  Text(strTime, style: TextStyle(fontSize: 30, color: Colors.blue))
+                ]);
+              }
+          ),
+
           actions: <Widget>[
             TextButton(
                 child: Text('閉じる'),
                 onPressed: () => Navigator.pop<String>(context, 'Yes')),
           ],
-        ));
+        )
+    );
+
+
+    Timer.periodic(Duration(seconds: 1), _onTimer);
+  }
+  /*------------------------------------------------------------------
+リアルタイムカウントダウン
+ -------------------------------------------------------------------*/
+  void _onTimer(Timer timer) {
+
+    dtCntTime = dtCntTime.subtract(Duration(seconds: 1));
+
+    debugPrint(dtCntTime.toString());
+    debugPrint(strTime.toString());
+    setState(() => {
+       strTime = '${dtCntTime.minute.toString().padLeft(2,'0')}分 ${dtCntTime.second.toString().padLeft(2,'0')}秒'
+     });
+
   }
   /*------------------------------------------------------------------
 第一画面ロード
