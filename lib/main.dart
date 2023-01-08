@@ -122,6 +122,8 @@ class _MainScreenState extends State<MainScreen> {
     String strOtherSideText = '';
     String strTimeText = '';
     DateTime dtTime = DateTime.now();
+    String selectedValue = '月曜日';
+    final lists = ['編集', '削除' ];
 
     //アチーブメントユーザーマスタから達成状況をロード
     //  achievementUserMap = await  _loadAchievementUser();
@@ -148,8 +150,20 @@ class _MainScreenState extends State<MainScreen> {
             //      : const Icon(Icons.stop_circle, size: 18,),
             title: Text('${item['title']}  ', style: TextStyle(color: Colors.black , fontSize: 20),),
             subtitle: Row(children:  <Widget>[Text('$strTimeText ', style: TextStyle(color: Colors.black , fontSize: 25) ), Text('$strOtherSideText', style: TextStyle(color: Colors.black , fontSize: 15),)] ),
-            trailing: Icon(Icons.more_vert),
-            //  dense: true,
+            trailing: PopupMenuButton(
+              itemBuilder: (context) {
+                return lists.map((String list) {
+                  return PopupMenuItem(
+                    value: list,
+                    child: Text(list),
+                  );
+                }).toList();
+              },
+              onSelected: (String list) {
+                debugPrint(list);
+              },
+            ),
+
             isThreeLine: true,
              selected: listNo == item['no'],
              onTap: () {
