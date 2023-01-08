@@ -115,6 +115,8 @@ class _MainScreenState extends State<MainScreen> {
     List<Widget> list = <Widget>[];
     int listNo = 0;
     String listTitle ='';
+    String listTime ='';
+    int listOtherSide = 0;
     String strOtherSideText = '';
     String strTimeText = '';
     DateTime dtTime = DateTime.now();
@@ -153,33 +155,28 @@ class _MainScreenState extends State<MainScreen> {
              onTap: () {
                listNo = item['no'];
                listTitle = item['title'];
-               _tapTile(listTitle);
+               listTime = item['time'];
+               listOtherSide = item['otherside'];
+               _tapTile(listTitle,listTime,listOtherSide);
             },
           ),
       );
     }
-    setState(() {
-      _items = list;
-    });
+    setState(() {_items = list;});
   }
-  void _tapTile(String listTitle) {
-
+  void _tapTile(String listTitle ,String listTime, int listOtherSide) {
     showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
           title:  Text(listTitle,style:  TextStyle( fontSize: 18)),
-          content: Text('test',style:  TextStyle( fontSize: 12)),
+          content: Text(listTime,style:  TextStyle( fontSize: 12)),
           actions: <Widget>[
             TextButton(
                 child: Text('閉じる'),
                 onPressed: () => Navigator.pop<String>(context, 'Yes')),
           ],
         ));
-
-
   }
-
-
   /*------------------------------------------------------------------
 第一画面ロード
  -------------------------------------------------------------------*/
