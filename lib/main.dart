@@ -64,6 +64,9 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+
+
+
   @override
   void initState() {
     super.initState();
@@ -110,7 +113,8 @@ class _MainScreenState extends State<MainScreen> {
   }
   Future<void> getItems() async {
     List<Widget> list = <Widget>[];
-
+    int listNo = 0;
+    String listTitle ='';
     String strOtherSideText = '';
     String strTimeText = '';
     DateTime dtTime = DateTime.now();
@@ -142,20 +146,36 @@ class _MainScreenState extends State<MainScreen> {
             //      : const Icon(Icons.stop_circle, size: 18,),
             title: Text('${item['title']}  ', style: TextStyle(color: Colors.black , fontSize: 20),),
             subtitle: Row(children:  <Widget>[Text('$strTimeText ', style: TextStyle(color: Colors.black , fontSize: 25) ), Text('$strOtherSideText', style: TextStyle(color: Colors.black , fontSize: 15),)] ),
-
-              dense: true,
-            // selected: listNo == item['No'],
-            // onTap: () {
-            //   listNo = item['No'];
-            //   _tapTile();
-            //},
-          ));
+            trailing: Icon(Icons.more_vert),
+            //  dense: true,
+            isThreeLine: true,
+             selected: listNo == item['no'],
+             onTap: () {
+               listNo = item['no'];
+               listTitle = item['title'];
+               _tapTile(listTitle);
+            },
+          ),
+      );
     }
     setState(() {
       _items = list;
     });
   }
-  void _tapTile() {
+  void _tapTile(String listTitle) {
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title:  Text(listTitle,style:  TextStyle( fontSize: 18)),
+          content: Text('test',style:  TextStyle( fontSize: 12)),
+          actions: <Widget>[
+            TextButton(
+                child: Text('閉じる'),
+                onPressed: () => Navigator.pop<String>(context, 'Yes')),
+          ],
+        ));
+
 
   }
 
