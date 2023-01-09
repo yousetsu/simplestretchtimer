@@ -79,8 +79,6 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('タイマー')),
-    //  body: SingleChildScrollView(
-     //     child: Column(
         body: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children:  <Widget>[
@@ -88,9 +86,15 @@ class _MainScreenState extends State<MainScreen> {
                 Expanded(
                   child: ListView(children: _items,),
                 ),
-              ]
+              ],
           ),
-  //    ),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: insertStretch,
+        tooltip: '登録',
+        child: const Icon(Icons.add),
+      ), // This trailing comma makes auto-formatt
+
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0,
         items: const <BottomNavigationBarItem>[
@@ -102,6 +106,9 @@ class _MainScreenState extends State<MainScreen> {
         },
       ),
     );
+  }
+  void insertStretch(){
+
   }
   Widget _listHeader() {
     return Container(
@@ -273,7 +280,6 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
       }
     });
   }
-
   /*------------------------------------------------------------------
 リアルタイムカウントダウン
  -------------------------------------------------------------------*/
@@ -301,16 +307,12 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
             dtCntTime = DateTime.parse(aweDialogTime),
             strTime = '${dtCntTime.minute.toString().padLeft(2,'0')}分 ${dtCntTime.second.toString().padLeft(2,'0')}秒'
           });
-
         }
-
       }
-
     }else{
       setState(() => {
         strTime = '${dtCntTime.minute.toString().padLeft(2,'0')}分 ${dtCntTime.second.toString().padLeft(2,'0')}秒'
       });
     }
-
   }
 }
