@@ -3,20 +3,21 @@ import 'package:flutter/services.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
-import './main.dart';
 import './const.dart';
 class StretchScreen extends StatefulWidget {
   String mode = '';
-  StretchScreen(this.mode);
+  int no = 0;
+  StretchScreen(this.mode,this.no);
 
   //const StretchScreen({Key? key}) : super(key: key); //コンストラクタ
 
   @override
-  State<StretchScreen> createState() =>  _StretchScreenState(mode);
+  State<StretchScreen> createState() =>  _StretchScreenState(mode,no);
 }
 class _StretchScreenState extends State<StretchScreen> {
   String mode = '';
-  _StretchScreenState(this.mode);
+  int no = 0;
+  _StretchScreenState(this.mode,this.no);
 
   final _formTitleKey = GlobalKey<FormState>();
   final _formPreSecondKey = GlobalKey<FormState>();
@@ -185,8 +186,41 @@ class _StretchScreenState extends State<StretchScreen> {
     //編集モード
       case cnsStretchScreenUpd:
         title = '編集画面';
+         loadEditData(no);
         break;
     }
+  }
+ void loadEditData(int editNo) async{
+
+   String lcTitle = '';
+   String lcTime = '';
+   int    lcOtherSideFlag = 0;
+   int lcPreSecond = 0;
+
+   String dbPath = await getDatabasesPath();
+   String path = p.join(dbPath, 'internal_assets.db');
+   Database database = await openDatabase(path, version: 1);
+   List<Map> result = await database.rawQuery("SELECT * From stretchlist where no = $editNo");
+   for (Map item in result) {
+     lcTitle = item['title'];
+      lcTime = item['time'];
+      lcOtherSideFlag = item['otherside'];
+      lcPreSecond = item['presecond'];
+   }
+
+   setState(() {
+     _textControllerTitle.text = lcTitle;
+     _time = DateTime.parse(lcTime);
+     if(lcOtherSideFlag == cnsOtherSideOff){
+       _otherSideFlag = false;
+     }else{
+       _otherSideFlag = true;
+     }
+
+     _textControllerPreSecond.text = lcPreSecond.toString();
+
+   });
+
   }
   Future<void>  insertStretchData(int lcNo)async{
     int lcOtherSide = 0 ;

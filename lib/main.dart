@@ -133,13 +133,13 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
   void insertStretch() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => StretchScreen(cnsStretchScreenIns)),
+      MaterialPageRoute(builder: (context) => StretchScreen(cnsStretchScreenIns,-1)),
     );
   }
-  void updStretch(){
+  void updStretch(int lcNo){
     Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => StretchScreen(cnsStretchScreenUpd)),
+        MaterialPageRoute(builder: (context) => StretchScreen(cnsStretchScreenUpd,lcNo)),
       );
   }
 
@@ -218,7 +218,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
                 debugPrint(list);
                 switch (list) {
                   case '編集':
-                    updStretch();
+                    updStretch(item['no']);
                     break;
                   case '削除':
                     delStretch(item['no']);
