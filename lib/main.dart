@@ -119,6 +119,23 @@ class _MainScreenState extends State<MainScreen> {
         MaterialPageRoute(builder: (context) => StretchScreen('編集')),
       );
   }
+
+  Future<void> delStretch(int lcNo) async{
+
+    await delStretchDB(lcNo);
+    await loadList();
+    await getItems();
+  }
+  Future<void>  delStretchDB(int lcNo)async{
+    String dbPath = await getDatabasesPath();
+    String query = '';
+    String path = p.join(dbPath, 'internal_assets.db');
+    Database database = await openDatabase(path, version: 1,);
+    query = 'DELETE From stretchlist where no = $lcNo';
+    await database.transaction((txn) async {
+      await txn.rawInsert(query);
+    });
+  }
   Widget _listHeader() {
     return Container(
         decoration:  const BoxDecoration(
@@ -181,6 +198,7 @@ class _MainScreenState extends State<MainScreen> {
                     updStretch();
                     break;
                   case '削除':
+                    delStretch(item['no']);
                     break;
                 }
               },
@@ -225,7 +243,9 @@ class _MainScreenState extends State<MainScreen> {
  -------------------------------------------------------------------*/
   void init() async {
     // await  testEditDB();
+    debugPrint("loadList");
     await loadList();
+    debugPrint("getItems");
     await getItems();
   }
 }

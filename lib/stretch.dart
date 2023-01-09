@@ -168,7 +168,6 @@ class _StretchScreenState extends State<StretchScreen> {
     int intMax = 0;
     intMax =  await getMaxStretchNo();
     await insertStretchData(intMax+1);
-
     Navigator.pop(context);
   }
 
