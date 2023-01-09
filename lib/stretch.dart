@@ -49,7 +49,7 @@ class _StretchScreenState extends State<StretchScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children:  <Widget>[
 
-                Text('登録・編集画面です。',style:TextStyle(fontSize: 20.0)),
+                Text(title,style:TextStyle(fontSize: 20.0)),
 
                 Text('タイトル',style:TextStyle(fontSize: 20.0)),
                 Container(
