@@ -58,7 +58,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MainScreen(),
         '/setting': (context) => const SettingScreen(),
-        '/stretch': (context) => const StretchScreen(),
       },
     );
   }
@@ -109,8 +108,17 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
-  void insertStretch(){
-    Navigator.pushNamed(context, '/stretch');
+  void insertStretch() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => StretchScreen('登録')),
+    );
+  }
+    void updStretch(){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => StretchScreen('編集)),
+      );
   }
   Widget _listHeader() {
     return Container(
@@ -216,7 +224,6 @@ class _MainScreenState extends State<MainScreen> {
     await loadList();
     await getItems();
   }
-
 }
 /*------------------------------------------------------------------
 Statefulなダイアログ

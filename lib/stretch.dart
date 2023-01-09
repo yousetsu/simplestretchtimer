@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 class StretchScreen extends StatefulWidget {
-  const StretchScreen({Key? key}) : super(key: key); //コンストラクタ
+  String title = '';
+  StretchScreen(this.title);
+
+  //const StretchScreen({Key? key}) : super(key: key); //コンストラクタ
+
   @override
-  State<StretchScreen> createState() =>  _StretchScreenState();
+  State<StretchScreen> createState() =>  _StretchScreenState(title);
 }
 class _StretchScreenState extends State<StretchScreen> {
+  String title = '';
+  _StretchScreenState(this.title);
+
   @override
   void initState() {
     super.initState();
@@ -12,7 +19,7 @@ class _StretchScreenState extends State<StretchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title:  Text('登録・編集画面')),
+      appBar: AppBar(title:  Text(title)),
       body: SingleChildScrollView(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
