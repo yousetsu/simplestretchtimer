@@ -6,22 +6,25 @@ import 'package:sqflite/sqflite.dart';
 import './main.dart';
 import './const.dart';
 class StretchScreen extends StatefulWidget {
-  String title = '';
-  StretchScreen(this.title);
+  String mode = '';
+  StretchScreen(this.mode);
 
   //const StretchScreen({Key? key}) : super(key: key); //コンストラクタ
 
   @override
-  State<StretchScreen> createState() =>  _StretchScreenState(title);
+  State<StretchScreen> createState() =>  _StretchScreenState(mode);
 }
 class _StretchScreenState extends State<StretchScreen> {
-  String title = '';
-  _StretchScreenState(this.title);
+  String mode = '';
+  _StretchScreenState(this.mode);
 
   final _formTitleKey = GlobalKey<FormState>();
   final _formPreSecondKey = GlobalKey<FormState>();
   final _textControllerTitle = TextEditingController();
   final _textControllerPreSecond = TextEditingController();
+
+
+  String title = 'モードなし';
   DateTime _time = DateTime.utc(0, 0, 0);
 
   bool _otherSideFlag = false;
@@ -35,6 +38,7 @@ class _StretchScreenState extends State<StretchScreen> {
   @override
   void initState() {
     super.initState();
+     init();
   }
   @override
   Widget build(BuildContext context) {
@@ -171,7 +175,19 @@ class _StretchScreenState extends State<StretchScreen> {
     await insertStretchData(intMax+1);
     Navigator.pop(context);
   }
+  void init(){
+    switch (mode) {
+    //登録モード
+      case cnsStretchScreenIns:
+        title = '登録画面';
 
+        break;
+    //編集モード
+      case cnsStretchScreenUpd:
+        title = '編集画面';
+        break;
+    }
+  }
   Future<void>  insertStretchData(int lcNo)async{
     int lcOtherSide = 0 ;
     String dbPath = await getDatabasesPath();

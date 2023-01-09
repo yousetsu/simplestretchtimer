@@ -133,13 +133,13 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
   void insertStretch() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => StretchScreen('登録')),
+      MaterialPageRoute(builder: (context) => StretchScreen(cnsStretchScreenIns)),
     );
   }
   void updStretch(){
     Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => StretchScreen('編集')),
+        MaterialPageRoute(builder: (context) => StretchScreen(cnsStretchScreenUpd)),
       );
   }
 
