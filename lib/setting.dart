@@ -15,7 +15,7 @@ class _SettingScreenState extends State<SettingScreen> {
       appBar: AppBar(title: const Text('設定画面')),
       body: SingleChildScrollView(
           child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: const <Widget>[
                 Text('第二画面です',style:TextStyle(fontSize: 20.0)),
               ]

@@ -12,7 +12,6 @@ import './const.dart';
 List<Widget> _items = <Widget>[];
 List<Map> map_stretchlist = <Map>[];
 
-
 /*------------------------------------------------------------------
 全共通のメソッド
  -------------------------------------------------------------------*/
@@ -129,7 +128,6 @@ class _MainScreenState extends State<MainScreen> {
             title:  Row(children:  <Widget>[
               Text('エクササイズリスト', style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
             ])));
-
   }
   Future<void> getItems() async {
     List<Widget> list = <Widget>[];
@@ -140,7 +138,6 @@ class _MainScreenState extends State<MainScreen> {
     String strOtherSideText = '';
     String strTimeText = '';
     DateTime dtTime = DateTime.now();
-    String selectedValue = '月曜日';
     final lists = ['編集', '削除' ];
 
     //アチーブメントユーザーマスタから達成状況をロード
@@ -179,6 +176,13 @@ class _MainScreenState extends State<MainScreen> {
               },
               onSelected: (String list) {
                 debugPrint(list);
+                switch (list) {
+                  case '編集':
+                    updStretch();
+                    break;
+                  case '削除':
+                    break;
+                }
               },
             ),
 
@@ -257,7 +261,6 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
      dtCntTime = DateTime.parse(aweDialogTime);
     timer = Timer.periodic(Duration(seconds: 1), _onTimer);
   }
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
