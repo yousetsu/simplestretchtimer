@@ -114,10 +114,10 @@ class _MainScreenState extends State<MainScreen> {
       MaterialPageRoute(builder: (context) => StretchScreen('登録')),
     );
   }
-    void updStretch(){
-      Navigator.push(
+  void updStretch(){
+    Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => StretchScreen('編集)),
+        MaterialPageRoute(builder: (context) => StretchScreen('編集')),
       );
   }
   Widget _listHeader() {
