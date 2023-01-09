@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_picker/flutter_picker.dart';
-import "package:intl/intl.dart";
-
+import 'package:path/path.dart' as p;
+import 'package:sqflite/sqflite.dart';
 class StretchScreen extends StatefulWidget {
   String title = '';
   StretchScreen(this.title);
@@ -22,11 +22,11 @@ class _StretchScreenState extends State<StretchScreen> {
   final _textControllerPreSecond = TextEditingController();
   DateTime _time = DateTime.utc(0, 0, 0);
 
-  bool _flag = false;
+  bool _otherSideFlag = false;
 
   void _handleCheckbox(bool? e) {
     setState(() {
-      _flag = e!;
+      _otherSideFlag = e!;
     });
   }
 
@@ -108,7 +108,7 @@ class _StretchScreenState extends State<StretchScreen> {
               children:  <Widget>[
                 Checkbox(
                   activeColor: Colors.blue, // Onになった時の色を指定
-                  value: _flag, // チェックボックスのOn/Offを保持する値
+                  value: _otherSideFlag, // チェックボックスのOn/Offを保持する値
                   onChanged: _handleCheckbox, // チェックボックスを押下した際に行う処理
                 ),
                 Text('反対側のストレッチ',style:TextStyle(fontSize: 20.0)),
@@ -163,7 +163,40 @@ class _StretchScreenState extends State<StretchScreen> {
 
     );
   }
-  void buttonPressed(){
+  void buttonPressed() async{
+
+    int intMax = 0;
+    intMax =  await getMaxStretchNo();
+    await insertStretchData(intMax+1);
+
     Navigator.pop(context);
   }
+
+  Future<void>  insertStretchData(int lcNo)async{
+    int lcOtherSide = 0 ;
+    String dbPath = await getDatabasesPath();
+    String query = '';
+    String path = p.join(dbPath, 'internal_assets.db');
+    Database database = await openDatabase(path, version: 1,);
+    if(_otherSideFlag){
+      lcOtherSide = 1;
+    }
+    query = 'INSERT INTO stretchlist(no,title,time,otherside,presecond,kaku1,kaku2,kaku3,kaku4) values($lcNo,"${_textControllerTitle.text}","${_time.toString()}",$lcOtherSide,"${_textControllerPreSecond.text}",null,null,null,null) ';
+    await database.transaction((txn) async {
+      await txn.rawInsert(query);
+    });
+  }
+  Future<int>  getMaxStretchNo() async{
+    int lcMaxNo = 0;
+    String dbPath = await getDatabasesPath();
+    String path = p.join(dbPath, 'internal_assets.db');
+    Database database = await openDatabase(path, version: 1,);
+    List<Map> result = await database.rawQuery("SELECT MAX(no) no From stretchlist");
+    for (Map item in result) {
+      lcMaxNo = item['no'];
+    }
+    return lcMaxNo;
+  }
+
+
 }
