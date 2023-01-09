@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import "package:intl/intl.dart";
 
@@ -17,7 +18,17 @@ class _StretchScreenState extends State<StretchScreen> {
 
   final _formKey = GlobalKey<FormState>();
   final _textControllerTitle = TextEditingController();
+  final _textControllerPreSecond = TextEditingController();
   DateTime _time = DateTime.utc(0, 0, 0);
+
+  bool _flag = false;
+
+  void _handleCheckbox(bool? e) {
+    setState(() {
+      _flag = e!;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -88,6 +99,51 @@ class _StretchScreenState extends State<StretchScreen> {
                     ).showModal(context);
                   },
                   child: Text(DateFormat.Hm().format(_time), style: const TextStyle(fontSize: 35),),
+                ),
+                ///左右上下反対側のストレッチ
+
+          Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children:  <Widget>[
+                Checkbox(
+                  activeColor: Colors.blue, // Onになった時の色を指定
+                  value: _flag, // チェックボックスのOn/Offを保持する値
+                  onChanged: _handleCheckbox, // チェックボックスを押下した際に行う処理
+                ),
+                Text('反対側のストレッチ',style:TextStyle(fontSize: 20.0)),
+              ]),
+
+                ///ストレッチを準備する時間（秒）
+                Text('ストレッチを準備する時間',style:TextStyle(fontSize: 20.0)),
+                Container(
+                  padding: const EdgeInsets.all(5.0),
+                  alignment: Alignment.bottomCenter,
+                  width: 150.0,
+                  height: 70,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.lightBlueAccent),
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.lightBlueAccent,
+                  ),
+                  child:Form(
+                    key: _formKey,
+                    child: TextFormField(
+                      controller: _textControllerPreSecond,
+                      validator: (value) {
+                        if (value != null && value.isEmpty) {
+                          return '何か入力してください';
+                        }else if(int.parse(value!) > 99){
+                          return '最高99秒までです';
+                        }
+                        return null;
+                      },
+                      // decoration: InputDecoration(hintText: "1~180"),
+                      style: const TextStyle(fontSize: 25, color: Colors.white,),
+                      textAlign: TextAlign.center,
+                      maxLength: 2,
+                         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    ),
+                  ),
                 ),
 
                 ///保存ボタン
