@@ -79,7 +79,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
   }
   @override
   void didChangeDependencies() { // 遷移時に呼ばれる関数
-    // routeObserverに自身を設定
+    // routeObserverに自身を設定(didPopのため)
     super.didChangeDependencies();
     if (ModalRoute.of(context) != null) {
       routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
@@ -88,7 +88,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
 
   @override
   void dispose() {
-    // routeObserverから自身を外す
+    // routeObserverから自身を外す(didPopのため)
     routeObserver.unsubscribe(this);
     super.dispose();
   }
