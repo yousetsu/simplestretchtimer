@@ -7,6 +7,7 @@ import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter_beep/flutter_beep.dart';
 import './setting.dart';
+import './stretch.dart';
 import './const.dart';
 List<Widget> _items = <Widget>[];
 List<Map> map_stretchlist = <Map>[];
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const MainScreen(),
         '/setting': (context) => const SettingScreen(),
+        '/stretch': (context) => const StretchScreen(),
       },
     );
   }
@@ -108,7 +110,7 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
   void insertStretch(){
-
+    Navigator.pushNamed(context, '/stretch');
   }
   Widget _listHeader() {
     return Container(
