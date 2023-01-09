@@ -16,7 +16,8 @@ class _StretchScreenState extends State<StretchScreen> {
   String title = '';
   _StretchScreenState(this.title);
 
-  final _formKey = GlobalKey<FormState>();
+  final _formTitleKey = GlobalKey<FormState>();
+  final _formPreSecondKey = GlobalKey<FormState>();
   final _textControllerTitle = TextEditingController();
   final _textControllerPreSecond = TextEditingController();
   DateTime _time = DateTime.utc(0, 0, 0);
@@ -48,7 +49,7 @@ class _StretchScreenState extends State<StretchScreen> {
                 Container(
                   padding: const EdgeInsets.all(5.0),
                   alignment: Alignment.bottomCenter,
-                  width: 150.0,
+                  width: 300.0,
                   height: 70,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.lightBlueAccent),
@@ -56,7 +57,7 @@ class _StretchScreenState extends State<StretchScreen> {
                     color: Colors.lightBlueAccent,
                   ),
                   child:Form(
-                    key: _formKey,
+                    key: _formTitleKey,
                     child: TextFormField(
                       controller: _textControllerTitle,
                       validator: (value) {
@@ -83,7 +84,7 @@ class _StretchScreenState extends State<StretchScreen> {
                   onPressed: () async {
                     Picker(
                         adapter: DateTimePickerAdapter(
-                            type: PickerDateTimeType.kHM,
+                            type: PickerDateTimeType.kHMS,
                             value: _time,
                             customColumnType: [4, 5]),
                         title: const Text("Select Time"),
@@ -98,7 +99,7 @@ class _StretchScreenState extends State<StretchScreen> {
                         }
                     ).showModal(context);
                   },
-                  child: Text(DateFormat.Hm().format(_time), style: const TextStyle(fontSize: 35),),
+                  child: Text('${_time.minute.toString().padLeft(2,'0')}分${_time.second.toString().padLeft(2,'0')}秒', style: const TextStyle(fontSize: 35),),
                 ),
                 ///左右上下反対側のストレッチ
 
@@ -126,7 +127,7 @@ class _StretchScreenState extends State<StretchScreen> {
                     color: Colors.lightBlueAccent,
                   ),
                   child:Form(
-                    key: _formKey,
+                    key: _formPreSecondKey,
                     child: TextFormField(
                       controller: _textControllerPreSecond,
                       validator: (value) {
