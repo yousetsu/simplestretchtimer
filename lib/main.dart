@@ -11,7 +11,8 @@ import './stretch.dart';
 import './const.dart';
 List<Widget> _items = <Widget>[];
 List<Map> map_stretchlist = <Map>[];
-
+//didpop使う為
+final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 /*------------------------------------------------------------------
 全共通のメソッド
  -------------------------------------------------------------------*/
@@ -58,6 +59,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => const MainScreen(),
         '/setting': (context) => const SettingScreen(),
       },
+      //didipop使うため
+      navigatorObservers: [routeObserver],
     );
   }
 }
@@ -67,14 +70,34 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends State<MainScreen> with RouteAware {
 
   @override
   void initState() {
     super.initState();
     init();
   }
+  @override
+  void didChangeDependencies() { // 遷移時に呼ばれる関数
+    // routeObserverに自身を設定
+    super.didChangeDependencies();
+    if (ModalRoute.of(context) != null) {
+      routeObserver.subscribe(this, ModalRoute.of(context)! as PageRoute);
+    }
+  }
 
+  @override
+  void dispose() {
+    // routeObserverから自身を外す
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+  @override
+  void didPopNext() {
+    // 再描画
+    debugPrint("didpop");
+    init();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

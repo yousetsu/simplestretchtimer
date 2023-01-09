@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
+import './main.dart';
+import './const.dart';
 class StretchScreen extends StatefulWidget {
   String title = '';
   StretchScreen(this.title);
@@ -164,7 +166,6 @@ class _StretchScreenState extends State<StretchScreen> {
     );
   }
   void buttonPressed() async{
-
     int intMax = 0;
     intMax =  await getMaxStretchNo();
     await insertStretchData(intMax+1);
@@ -196,6 +197,5 @@ class _StretchScreenState extends State<StretchScreen> {
     }
     return lcMaxNo;
   }
-
 
 }
