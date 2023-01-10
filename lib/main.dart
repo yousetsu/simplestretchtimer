@@ -107,7 +107,14 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
               children:  <Widget>[
                 _listHeader(),
                 Expanded(
-                  child: ListView(children: _items,),
+                  child: ReorderableListView(
+                    onReorder: (int oldIndex, int newIndex) {
+                      debugPrint('old:$oldIndex new:$newIndex');
+                      //入れ替えロジック
+                      changeList(oldIndex+1,newIndex);
+                    },
+                    children: _items,
+                  ),
                 ),
               ],
           ),
@@ -130,6 +137,34 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
       ),
     );
   }
+  void changeList(int oldIndex, int newIndex) async{
+
+    await changeListUpd(oldIndex,newIndex);
+    await loadList();
+    await getItems();
+  }
+  Future<void> changeListUpd(int oldIndex, int newIndex) async{
+
+    ///oldを -1にする
+    await updListNo(oldIndex,-1);
+    ///newをoldにする
+    await updListNo(newIndex,oldIndex);
+    /// -1をnewにする
+    await updListNo(-1,newIndex);
+
+  }
+  Future<void> updListNo( int whereNo ,int updNo)async{
+    debugPrint('where:$whereNo upd:$updNo');
+    String dbPath = await getDatabasesPath();
+    String query = '';
+    String path = p.join(dbPath, 'internal_assets.db');
+    Database database = await openDatabase(path, version: 1,);
+    query = ' UPDATE stretchlist set no = $updNo where no = $whereNo';
+    await database.transaction((txn) async {
+      await txn.rawInsert(query);
+    });
+  }
+
   void insertStretch() {
     Navigator.push(
       context,
@@ -178,13 +213,13 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
     String strOtherSideText = '';
     String strTimeText = '';
     DateTime dtTime = DateTime.now();
-    final lists = ['編集', '削除' ];
+    final lists = ['編集', '削除'];
 
     //アチーブメントユーザーマスタから達成状況をロード
     //  achievementUserMap = await  _loadAchievementUser();
 
     for (Map item in map_stretchlist) {
-
+       debugPrint('no:${item['no']},title:${item['title']}');
       //反対側ありなし判定
       if( item['otherside'] == cnsOtherSideOn) {
         strOtherSideText = 'ずつ';
@@ -196,6 +231,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
 
       list.add(
           ListTile(
+            key: Key('${item['no']}'),
             //tileColor: Colors.grey,
             // tileColor: (item['getupstatus'].toString() == cnsGetupStatusS)
             //     ? Colors.green
@@ -257,7 +293,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
     String dbPath = await getDatabasesPath();
     String path = p.join(dbPath, 'internal_assets.db');
     Database database = await openDatabase(path, version: 1);
-     map_stretchlist = await database.rawQuery("SELECT * From stretchlist ");
+     map_stretchlist = await database.rawQuery("SELECT * From stretchlist order by no");
 
     //  await database.close();
   }
