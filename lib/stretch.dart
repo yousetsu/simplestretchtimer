@@ -27,6 +27,7 @@ class _StretchScreenState extends State<StretchScreen> {
 
   String title = 'モードなし';
   DateTime _time = DateTime.utc(0, 0, 0);
+  String buttonName = '登録';
 
   bool _otherSideFlag = false;
 
@@ -160,7 +161,7 @@ class _StretchScreenState extends State<StretchScreen> {
                   child: ElevatedButton(
                    // style: ElevatedButton.styleFrom(foregroundColor: Colors.blue , elevation: 16),
                     onPressed: buttonPressed,
-                    child: Text( '保存', style:  TextStyle(fontSize: 30.0, color: Colors.white,),),
+                    child: Text( buttonName, style:  TextStyle(fontSize: 30.0, color: Colors.white,),),
                   ),
                 ),
 
@@ -171,9 +172,20 @@ class _StretchScreenState extends State<StretchScreen> {
     );
   }
   void buttonPressed() async{
+
     int intMax = 0;
-    intMax =  await getMaxStretchNo();
-    await insertStretchData(intMax+1);
+    switch (mode) {
+    //登録モード
+      case cnsStretchScreenIns:
+        intMax =  await getMaxStretchNo();
+        await insertStretchData(intMax+1);
+        break;
+    //編集モード
+      case cnsStretchScreenUpd:
+        await updateStretchData(no);
+        break;
+    }
+
     Navigator.pop(context);
   }
   void init(){
@@ -181,11 +193,12 @@ class _StretchScreenState extends State<StretchScreen> {
     //登録モード
       case cnsStretchScreenIns:
         title = '登録画面';
-
+        buttonName  = '登録';
         break;
     //編集モード
       case cnsStretchScreenUpd:
         title = '編集画面';
+        buttonName  = '更新';
          loadEditData(no);
         break;
     }
@@ -233,6 +246,23 @@ class _StretchScreenState extends State<StretchScreen> {
     }
     query = 'INSERT INTO stretchlist(no,title,time,otherside,presecond,kaku1,kaku2,kaku3,kaku4) values($lcNo,"${_textControllerTitle.text}","${_time.toString()}",$lcOtherSide,"${_textControllerPreSecond.text}",null,null,null,null) ';
     await database.transaction((txn) async {
+      await txn.rawInsert(query);
+    });
+  }
+  Future<void>  updateStretchData(int lcNo)async{
+    int lcOtherSide = 0 ;
+    int lcPreSecond = 0 ;
+    String dbPath = await getDatabasesPath();
+    String query = '';
+    String path = p.join(dbPath, 'internal_assets.db');
+    Database database = await openDatabase(path, version: 1,);
+    if(_otherSideFlag){
+      lcOtherSide = 1;
+    }
+    lcPreSecond =  int.parse(_textControllerPreSecond.text);
+    query = "UPDATE stretchlist set title = '${_textControllerTitle.text}', time = '${_time.toString()}',otherside = $lcOtherSide, presecond = ${lcPreSecond} where no = $lcNo ";
+    debugPrint(query);
+     await database.transaction((txn) async {
       await txn.rawInsert(query);
     });
   }
