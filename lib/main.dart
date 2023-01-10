@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
@@ -109,9 +108,16 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
                 Expanded(
                   child: ReorderableListView(
                     onReorder: (int oldIndex, int newIndex) {
-                      debugPrint('old:$oldIndex new:$newIndex');
+                      setState(() {
+                        if (oldIndex < newIndex) {
+                          newIndex -= 1;
+                        }
+                        debugPrint('old:$oldIndex new:$newIndex');
+                        Widget _itemDummy = _items.removeAt(oldIndex);
+                        _items.insert(newIndex, _itemDummy);
+                      });
                       //入れ替えロジック
-                      changeList(oldIndex+1,newIndex);
+                      changeList(oldIndex+1,newIndex+1);
                     },
                     children: _items,
                   ),
@@ -137,20 +143,21 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
       ),
     );
   }
-  void changeList(int oldIndex, int newIndex) async{
+  void changeList(int oldDbNo, int newDbNo) async{
 
-    await changeListUpd(oldIndex,newIndex);
+    debugPrint('DBno  oldDbNo:$oldDbNo   newDbNo:$newDbNo');
+    await changeListUpd(oldDbNo,newDbNo);
     await loadList();
     await getItems();
   }
-  Future<void> changeListUpd(int oldIndex, int newIndex) async{
+  Future<void> changeListUpd(int oldDbNo, int newDbNo) async{
 
     ///oldを -1にする
-    await updListNo(oldIndex,-1);
+    await updListNo(oldDbNo,-1);
     ///newをoldにする
-    await updListNo(newIndex,oldIndex);
+    await updListNo(newDbNo,oldDbNo);
     /// -1をnewにする
-    await updListNo(-1,newIndex);
+    await updListNo(-1,newDbNo);
 
   }
   Future<void> updListNo( int whereNo ,int updNo)async{
@@ -215,9 +222,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
     DateTime dtTime = DateTime.now();
     final lists = ['編集', '削除'];
 
-    //アチーブメントユーザーマスタから達成状況をロード
-    //  achievementUserMap = await  _loadAchievementUser();
-
+    int index = 0;
     for (Map item in map_stretchlist) {
        debugPrint('no:${item['no']},title:${item['title']}');
       //反対側ありなし判定
@@ -231,7 +236,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
 
       list.add(
           ListTile(
-            key: Key('${item['no']}'),
+            key: Key('$index'),
             //tileColor: Colors.grey,
             // tileColor: (item['getupstatus'].toString() == cnsGetupStatusS)
             //     ? Colors.green
@@ -274,6 +279,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
             },
           ),
       );
+       index++;
     }
     setState(() {_items = list;});
   }
