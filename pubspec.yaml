@@ -14,7 +14,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   sqflite: ^2.2.2
   path: ^1.8.2
-  flutter_beep: ^1.0.0
   flutter_picker: ^2.0.5
   intl: ^0.18.0
   just_audio: ^0.9.31
