@@ -12,7 +12,7 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   void initState() {
     super.initState();
-//    loadSetting();
+    loadSetting();
   }
   @override
   Widget build(BuildContext context) {
@@ -81,16 +81,16 @@ class _SettingScreenState extends State<SettingScreen> {
       await txn.rawInsert(query);
     });
   }
-  // Future<void> loadSetting() async{
-  //   String dbPath = await getDatabasesPath();
-  //   String query = '';
-  //   String path = p.join(dbPath, 'internal_assets.db');
-  //   Database database = await openDatabase(path, version: 1,);
-  //   query = "UPDATE setting set notificationsetting = '$type' ";
-  //   await database.transaction((txn) async {
-  //     await txn.rawInsert(query);
-  //   });
-  // }
+  Future<void> loadSetting() async{
 
+    String dbPath = await getDatabasesPath();
+    String path = p.join(dbPath, 'internal_assets.db');
+    Database database = await openDatabase(path, version: 1,);
+    List<Map> mapSetting = await database.rawQuery("SELECT * From setting limit 1");
+   for(Map item in mapSetting){
+     setState(() {   _type = item['notificationsetting'];  });
+   }
+
+  }
 
 }
