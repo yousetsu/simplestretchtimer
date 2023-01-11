@@ -13,11 +13,12 @@ class AwesomeDialog extends StatefulWidget {
   String dialogTitle = '';
   String dialogTime = '';
   int dialogOtherSide = 0;
+  int dialogPreSecond = 0;
   int dialognotificationType = 0;
-  AwesomeDialog(this.dialogTitle, this.dialogTime ,this.dialogOtherSide,this.dialognotificationType);
+  AwesomeDialog(this.dialogTitle, this.dialogTime ,this.dialogOtherSide,this.dialogPreSecond,this.dialognotificationType);
 
   @override
-  _AwesomeDialogState createState() => _AwesomeDialogState(dialogTitle, dialogTime ,dialogOtherSide,dialognotificationType);
+  _AwesomeDialogState createState() => _AwesomeDialogState(dialogTitle, dialogTime ,dialogOtherSide,dialogPreSecond,dialognotificationType);
 }
 
 class _AwesomeDialogState extends State<AwesomeDialog> {
@@ -25,29 +26,51 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
   String aweDialogTitle = '';
   String aweDialogTime = '';
   int aweDialogOtherSide = 0;
+  int aweDialogPreSecond = 0;
   int notificationType = 0;
+  String realDialogTitle = '';
+  int countState = 0;
+
   DateTime dtCntTime = DateTime.now();
+  int dtCntTimeSecond = 0;
   Timer? timer;
   bool playFlg = true;
-  bool otherFlg = false;
 
-  _AwesomeDialogState(this.aweDialogTitle, this.aweDialogTime ,this.aweDialogOtherSide,this.notificationType );
+  _AwesomeDialogState(this.aweDialogTitle, this.aweDialogTime,
+      this.aweDialogOtherSide, this.aweDialogPreSecond, this.notificationType);
 
   @override
   void initState() {
     super.initState();
 
-    _setupSession();
-    dtCntTime = DateTime.parse(aweDialogTime);
+    //通知モードがバイブレーションならセットアップしない
+    if (notificationType != cnsNotificationTypeVib) {
+      _setupSession();
+    }
+
+    //初期の状態セット
+    if (aweDialogPreSecond > 0) {
+      countState = cnsCountStateReady;
+      realDialogTitle = '開始まであと';
+      dtCntTime = DateTime.utc(0, 0, 0, 0, 0, aweDialogPreSecond);
+      dtCntTimeSecond = aweDialogPreSecond;
+    } else {
+      countState = cnsCountStateStretch;
+      realDialogTitle = aweDialogTitle;
+      dtCntTime = DateTime.parse(aweDialogTime);
+      dtCntTimeSecond = dtCntTime.minute * 60 + dtCntTime.second;
+    }
     timer = Timer.periodic(Duration(seconds: 1), _onTimer);
   }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(this.aweDialogTitle),
+      title: Text(realDialogTitle),
       content: Row(
-          children:<Widget>[
-            Text('$strTime', style: TextStyle(fontSize: 30, color: Colors.blue)),
+          children: <Widget>[
+            Text(
+                '$strTime', style: TextStyle(fontSize: 30, color: Colors.blue)),
           ]),
       actions: <Widget>[
         TextButton(
@@ -59,6 +82,7 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
       ],
     );
   }
+
   void resultAlert(String value) {
     setState(() {
       switch (value) {
@@ -73,9 +97,17 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
     });
   }
   /*------------------------------------------------------------------
+_setupSession
+ -------------------------------------------------------------------*/
+  Future<void> _setupSession() async {
+    _player = AudioPlayer();
+    final session = await AudioSession.instance;
+    await session.configure(AudioSessionConfiguration.speech());
+  }
+  /*------------------------------------------------------------------
 通知
  -------------------------------------------------------------------*/
-  void notification(){
+  void notification() {
     switch (notificationType) {
       case cnsNotificationTypeVib:
         Vibration.vibrate(duration: 1000);
@@ -91,53 +123,107 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
         break;
     }
   }
+
   /*------------------------------------------------------------------
-リアルタイムカウントダウン
+準備終了
+ -------------------------------------------------------------------*/
+  void readyEnd() {
+    //次の状態はストレッチ
+    countState = cnsCountStateStretch;
+
+    setState(() => {
+      realDialogTitle = aweDialogTitle
+    });
+
+    dtCntTime = DateTime.parse(aweDialogTime);
+    dtCntTimeSecond = dtCntTime.minute * 60 + dtCntTime.second;
+  }
+
+  /*------------------------------------------------------------------
+ストレッチ終了
+ -------------------------------------------------------------------*/
+  void stretchEnd() {
+    if (aweDialogOtherSide == cnsOtherSideOff) {
+      timer?.cancel();
+      Navigator.pop(context);
+    }else{
+      if(aweDialogPreSecond > 0) {
+        //次の状態は反対側の準備
+        countState = cnsCountStateReadyOther;
+        setState(() =>
+        {
+          realDialogTitle = '反対側開始まであと'
+        });
+        dtCntTime = DateTime.utc(0, 0, 0, 0, 0, aweDialogPreSecond);
+        dtCntTimeSecond = aweDialogPreSecond;
+      }else{
+        //次の状態は反対側のストレッチ
+        countState = cnsCountStateStretchOther;
+
+        setState(() => {
+          realDialogTitle = '$aweDialogTitle(反対側)',
+        });
+
+        dtCntTime = DateTime.parse(aweDialogTime);
+        dtCntTimeSecond = dtCntTime.minute * 60 + dtCntTime.second;
+      }
+    }
+  }
+  /*------------------------------------------------------------------
+ストレッチ終了
+ -------------------------------------------------------------------*/
+  void ReadyOtherEnd() {
+    //次の状態はストレッチ反対側
+    countState = cnsCountStateStretchOther;
+
+    setState(() => {
+      realDialogTitle = '$aweDialogTitle(反対側)',
+    });
+
+    dtCntTime = DateTime.parse(aweDialogTime);
+    dtCntTimeSecond = dtCntTime.minute * 60 + dtCntTime.second;
+  }
+  /*------------------------------------------------------------------
+リアルタイムカウントダウン(反対側なし)
  -------------------------------------------------------------------*/
   void _onTimer(Timer timer) {
 
-    ///カウントダウン処理
-    if(playFlg) {
-      dtCntTime = dtCntTime.subtract(Duration(seconds: 1));
-    }
-
-
-    ///ストレッチ時間減少
-    if(dtCntTime.minute <= 0 && dtCntTime.second <= 0){
-
+    ///ストレッチ時間経過(0:ストレッチ準備、1:ストレッチ、2:ストレッチ準備 3:ストレッチ反対側)
+    if (dtCntTimeSecond < 0) {
       debugPrint('時間経過！');
-
       notification();
 
-      if(aweDialogOtherSide == cnsOtherSideOff){
-        timer?.cancel();
-        Navigator.pop(context);
-      }else{
-        if(otherFlg == true){
+      switch (countState) {
+        case cnsCountStateReady:
+          readyEnd();
+          break;
+
+        case cnsCountStateStretch:
+          stretchEnd();
+          break;
+
+        case cnsCountStateReadyOther:
+          ReadyOtherEnd();
+          break;
+
+        case cnsCountStateStretchOther:
+          dtCntTime = DateTime(0,0,0,0,0);
           timer?.cancel();
           Navigator.pop(context);
-        }else{
-          otherFlg = true;
-          setState(() => {
-            aweDialogTitle = '$aweDialogTitle(反対側)',
-            dtCntTime = DateTime.parse(aweDialogTime),
-            strTime = '${dtCntTime.minute.toString().padLeft(2,'0')}分 ${dtCntTime.second.toString().padLeft(2,'0')}秒'
-          });
-        }
+          break;
       }
-    }else{
-      setState(() => {
-        strTime = '${dtCntTime.minute.toString().padLeft(2,'0')}分 ${dtCntTime.second.toString().padLeft(2,'0')}秒'
-      });
     }
-  }
-  /*------------------------------------------------------------------
-_setupSession
- -------------------------------------------------------------------*/
-  Future<void> _setupSession() async {
-    _player = AudioPlayer();
-    final session = await AudioSession.instance;
-    await session.configure(AudioSessionConfiguration.speech());
-  }
+    ///時間表示
+    setState(() =>
+    {
+      strTime = '${dtCntTime.minute.toString().padLeft(2, '0')}分 ${dtCntTime.second.toString().padLeft(2, '0')}秒'
+    });
 
+    ///カウントダウン処理
+    if (playFlg) {
+      dtCntTime = dtCntTime.subtract(Duration(seconds: 1));
+      dtCntTimeSecond--;
+    }
+
+  }
 }

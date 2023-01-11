@@ -222,6 +222,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
     String strOtherSideText = '';
     String strTimeText = '';
     DateTime dtTime = DateTime.now();
+    int listPreSecond = 0;
     final lists = ['編集', '削除'];
 
     int index = 0;
@@ -277,7 +278,8 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
                listTitle = item['title'];
                listTime = item['time'];
                listOtherSide = item['otherside'];
-               _tapTile(listTitle,listTime,listOtherSide);
+               listPreSecond = item['presecond'];
+               _tapTile(listTitle,listTime,listOtherSide,listPreSecond);
             },
           ),
       );
@@ -285,12 +287,12 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
     }
     setState(() {_items = list;});
   }
-  void _tapTile(String listTitle ,String listTime, int listOtherSide) {
+  void _tapTile(String listTitle ,String listTime, int listOtherSide,int listPreSecond) {
 
     showDialog(
         context: context,
         builder: (_) {
-          return AwesomeDialog(listTitle,listTime,listOtherSide,notificationType);
+          return AwesomeDialog(listTitle,listTime,listOtherSide,listPreSecond,notificationType);
         },
     );
   }
