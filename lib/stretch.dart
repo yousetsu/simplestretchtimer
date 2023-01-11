@@ -218,7 +218,7 @@ class _StretchScreenState extends State<StretchScreen> {
      lcTitle = item['title'];
       lcTime = item['time'];
       lcOtherSideFlag = item['otherside'];
-      lcPreSecond = item['presecond'];
+      lcPreSecond = (item['presecond'] == null)?0:item['presecond'];
    }
 
    setState(() {
@@ -240,11 +240,15 @@ class _StretchScreenState extends State<StretchScreen> {
     String dbPath = await getDatabasesPath();
     String query = '';
     String path = p.join(dbPath, 'internal_assets.db');
+    int preSecond = 0;
     Database database = await openDatabase(path, version: 1,);
     if(_otherSideFlag){
       lcOtherSide = 1;
     }
-    query = 'INSERT INTO stretchlist(no,title,time,otherside,presecond,kaku1,kaku2,kaku3,kaku4) values($lcNo,"${_textControllerTitle.text}","${_time.toString()}",$lcOtherSide,"${_textControllerPreSecond.text}",null,null,null,null) ';
+
+    preSecond = (_textControllerPreSecond.text == null)? 0:int.parse(_textControllerPreSecond.text);
+
+    query = 'INSERT INTO stretchlist(no,title,time,otherside,presecond,kaku1,kaku2,kaku3,kaku4) values($lcNo,"${_textControllerTitle.text}","${_time.toString()}",$lcOtherSide,"$preSecond",null,null,null,null) ';
     await database.transaction((txn) async {
       await txn.rawInsert(query);
     });

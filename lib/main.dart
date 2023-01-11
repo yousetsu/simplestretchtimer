@@ -285,7 +285,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
                listTitle = item['title'];
                listTime = item['time'];
                listOtherSide = item['otherside'];
-               listPreSecond = item['presecond'];
+               listPreSecond = (item['presecond'] == null)? 0 : item['presecond'];
                _tapTile(listTitle,listTime,listOtherSide,listPreSecond);
             },
           ),
