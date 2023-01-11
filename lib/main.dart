@@ -5,11 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter_beep/flutter_beep.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:vibration/vibration.dart';
 import './setting.dart';
 import './stretch.dart';
 import './const.dart';
 List<Widget> _items = <Widget>[];
 List<Map> map_stretchlist = <Map>[];
+int? notificationType = 0;
 //didpop使う為
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 /*------------------------------------------------------------------
@@ -70,6 +73,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> with RouteAware {
+
 
   @override
   void initState() {
@@ -312,7 +316,23 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
     await loadList();
     debugPrint("getItems");
     await getItems();
+    debugPrint("getNotificationType");
+    notificationType = await getNotificationType();
   }
+}
+/*------------------------------------------------------------------
+通知タイプ取得
+ -------------------------------------------------------------------*/
+Future<int?> getNotificationType() async{
+  int? type = 0;
+  String dbPath = await getDatabasesPath();
+  String path = p.join(dbPath, 'internal_assets.db');
+  Database database = await openDatabase(path, version: 1,);
+  List<Map> mapSetting = await database.rawQuery("SELECT * From setting limit 1");
+  for(Map item in mapSetting){
+    type = item['notificationsetting'];
+  }
+  return type;
 }
 /*------------------------------------------------------------------
 Statefulなダイアログ
@@ -378,6 +398,24 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
     });
   }
   /*------------------------------------------------------------------
+通知
+ -------------------------------------------------------------------*/
+  void notification(){
+   switch (notificationType) {
+     case cnsNotificationTypeVib:
+       Vibration.vibrate(duration: 1000);
+       break;
+
+     case cnsNotificationTypeSE:
+      // Vibration.vibrate(duration: 1000);
+       break;
+
+     case cnsNotificationTypeVoice:
+      // Vibration.vibrate(duration: 1000);
+       break;
+   }
+  }
+  /*------------------------------------------------------------------
 リアルタイムカウントダウン
  -------------------------------------------------------------------*/
   void _onTimer(Timer timer) {
@@ -389,7 +427,10 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
     if(dtCntTime.minute <= 0 && dtCntTime.second <= 0){
 
       debugPrint('時間経過！');
+
+      notification();
       FlutterBeep.beep();
+
       if(aweDialogOtherSide == cnsOtherSideOff){
         timer?.cancel();
         Navigator.pop(context);

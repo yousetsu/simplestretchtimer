@@ -17,6 +17,8 @@ dependencies:
   flutter_beep: ^1.0.0
   flutter_picker: ^2.0.5
   intl: ^0.18.0
+  just_audio: ^0.9.31
+  vibration: ^1.7.6
 
 dev_dependencies:
   flutter_test:

@@ -4,6 +4,6 @@ const int cnsOtherSideOn = 1;
 const String cnsStretchScreenIns = 'ins';
 const String cnsStretchScreenUpd = 'upd';
 
-const int cnsNotificationTypeVib = 0;
-const int cnsNotificationTypeSE = 1;
-const int cnsNotificationTypeVoice = 2;
+const int cnsNotificationTypeVib = 0; ///バイブレーション
+const int cnsNotificationTypeSE = 1; ///音
+const int cnsNotificationTypeVoice = 2; ///声
