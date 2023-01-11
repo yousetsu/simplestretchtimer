@@ -102,19 +102,19 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('タイマー')),
+      appBar: AppBar(title: const Text('ストレッチタイマー')),
         body: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children:  <Widget>[
-                _listHeader(),
+              //  _listHeader(),
                 Expanded(
                   child: ReorderableListView(
+           // ReorderableListView(
                     onReorder: (int oldIndex, int newIndex) {
                       setState(() {
                         if (oldIndex < newIndex) {
                           newIndex -= 1;
                         }
-                        debugPrint('old:$oldIndex new:$newIndex');
                         Widget _itemDummy = _items.removeAt(oldIndex);
                         _items.insert(newIndex, _itemDummy);
                       });
@@ -203,16 +203,16 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
       await txn.rawInsert(query);
     });
   }
-  Widget _listHeader() {
-    return Container(
-        decoration:  const BoxDecoration(
-            border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey))),
-
-        child: ListTile(
-            title:  Row(children:  <Widget>[
-              Text('エクササイズリスト', style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-            ])));
-  }
+  // Widget _listHeader() {
+  //   return Container(
+  //       decoration:  const BoxDecoration(
+  //           border: Border(bottom: BorderSide(width: 1.0, color: Colors.grey))),
+  //
+  //       child: ListTile(
+  //           title:  Row(children:  <Widget>[
+  //             Text('エクササイズリスト', style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+  //           ])));
+  // }
   Future<void> getItems() async {
     List<Widget> list = <Widget>[];
     int listNo = 0;
@@ -238,8 +238,15 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
       strTimeText = '${dtTime.minute.toString().padLeft(2,'0')}分${dtTime.second.toString().padLeft(2,'0')}秒';
 
       list.add(
-          ListTile(
-            key: Key('$index'),
+         Card(
+
+           margin: const EdgeInsets.fromLTRB(15,0,15,15),
+           shape: RoundedRectangleBorder(
+             borderRadius: BorderRadius.circular(10),
+           ),
+           key: Key('$index'),
+             child: ListTile(
+            //  key: Key('$index'),
             //tileColor: Colors.grey,
             // tileColor: (item['getupstatus'].toString() == cnsGetupStatusS)
             //     ? Colors.green
@@ -247,8 +254,8 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
             //  leading: boolAchieveReleaseFlg
             //      ? const Icon(Icons.play_circle, color: Colors.blue, size: 18,)
             //      : const Icon(Icons.stop_circle, size: 18,),
-            title: Text('${item['title']}  ', style: TextStyle(color: Colors.black , fontSize: 20),),
-            subtitle: Row(children:  <Widget>[Text('$strTimeText ', style: TextStyle(color: Colors.black , fontSize: 25) ), Text('$strOtherSideText', style: TextStyle(color: Colors.black , fontSize: 15),)] ),
+            title: Text('${item['title']}  ', style: TextStyle(color: Colors.black , fontSize: 30),),
+             subtitle: Row(children:  <Widget>[Text('$strTimeText ', style: TextStyle(color: Colors.grey , fontSize: 30) ), Text('$strOtherSideText', style: TextStyle(color: Colors.black , fontSize: 15),)] ),
             trailing: PopupMenuButton(
               itemBuilder: (context) {
                 return lists.map((String list) {
@@ -271,7 +278,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
               },
             ),
 
-            isThreeLine: true,
+           // isThreeLine: true,
              selected: listNo == item['no'],
              onTap: () {
                listNo = item['no'];
@@ -281,6 +288,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
                listPreSecond = item['presecond'];
                _tapTile(listTitle,listTime,listOtherSide,listPreSecond);
             },
+          ),
           ),
       );
        index++;
