@@ -246,6 +246,7 @@ class _StretchScreenState extends State<StretchScreen> {
       lcOtherSide = 1;
     }
 
+    //準備時間がnullだったらゼロにする
     preSecond = (_textControllerPreSecond.text == null)? 0:int.parse(_textControllerPreSecond.text);
 
     query = 'INSERT INTO stretchlist(no,title,time,otherside,presecond,kaku1,kaku2,kaku3,kaku4) values($lcNo,"${_textControllerTitle.text}","${_time.toString()}",$lcOtherSide,"$preSecond",null,null,null,null) ';
