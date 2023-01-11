@@ -31,3 +31,4 @@ flutter:
 
   assets:
     - assets/ex_stretch_db.db
+    - assets/audio/se01.mp3

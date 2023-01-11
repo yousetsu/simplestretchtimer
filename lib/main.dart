@@ -6,6 +6,7 @@ import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter_beep/flutter_beep.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:audio_session/audio_session.dart';
 import 'package:vibration/vibration.dart';
 import './setting.dart';
 import './stretch.dart';
@@ -13,6 +14,7 @@ import './const.dart';
 List<Widget> _items = <Widget>[];
 List<Map> map_stretchlist = <Map>[];
 int? notificationType = 0;
+late AudioPlayer _player;
 //didpop使う為
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 /*------------------------------------------------------------------
@@ -318,6 +320,8 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
     await getItems();
     debugPrint("getNotificationType");
     notificationType = await getNotificationType();
+
+    _setupSession();
   }
 }
 /*------------------------------------------------------------------
@@ -335,8 +339,17 @@ Future<int?> getNotificationType() async{
   return type;
 }
 /*------------------------------------------------------------------
-Statefulなダイアログ
+_setupSession
  -------------------------------------------------------------------*/
+Future<void> _setupSession() async {
+  _player = AudioPlayer();
+  final session = await AudioSession.instance;
+  await session.configure(AudioSessionConfiguration.speech());
+}
+
+///*------------------------------------------------------------------
+///Statefulなダイアログ
+/// -------------------------------------------------------------------*/
 class AwesomeDialog extends StatefulWidget {
   String dialogTitle = '';
   String dialogTime = '';
@@ -407,7 +420,8 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
        break;
 
      case cnsNotificationTypeSE:
-      // Vibration.vibrate(duration: 1000);
+       _player.setAsset('assets/audio/se01.mp3');
+       _player.play();
        break;
 
      case cnsNotificationTypeVoice:
@@ -429,7 +443,6 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
       debugPrint('時間経過！');
 
       notification();
-      FlutterBeep.beep();
 
       if(aweDialogOtherSide == cnsOtherSideOff){
         timer?.cancel();
