@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart' as p;
 import './const.dart';
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key); //コンストラクタ
@@ -10,6 +12,7 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   void initState() {
     super.initState();
+//    loadSetting();
   }
   @override
   Widget build(BuildContext context) {
@@ -53,7 +56,7 @@ class _SettingScreenState extends State<SettingScreen> {
 設定画面プライベートメソッド
  -------------------------------------------------------------------*/
 //ラジオボタン選択時の処理
-  void _handleRadio(int? e){
+  void _handleRadio(int? e) async{
     setState(() {
       _type = e;
       if(e == cnsNotificationTypeVib){
@@ -65,7 +68,29 @@ class _SettingScreenState extends State<SettingScreen> {
       }
     });
 
-  //  loadSetting();
+    await saveSetting(e);
 
   }
+  Future<void> saveSetting(int? type) async{
+    String dbPath = await getDatabasesPath();
+    String query = '';
+    String path = p.join(dbPath, 'internal_assets.db');
+    Database database = await openDatabase(path, version: 1,);
+    query = "UPDATE setting set notificationsetting = '$type' ";
+    await database.transaction((txn) async {
+      await txn.rawInsert(query);
+    });
+  }
+  // Future<void> loadSetting() async{
+  //   String dbPath = await getDatabasesPath();
+  //   String query = '';
+  //   String path = p.join(dbPath, 'internal_assets.db');
+  //   Database database = await openDatabase(path, version: 1,);
+  //   query = "UPDATE setting set notificationsetting = '$type' ";
+  //   await database.transaction((txn) async {
+  //     await txn.rawInsert(query);
+  //   });
+  // }
+
+
 }
