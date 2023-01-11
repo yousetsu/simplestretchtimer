@@ -242,7 +242,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
 
            margin: const EdgeInsets.fromLTRB(15,0,15,15),
            shape: RoundedRectangleBorder(
-             borderRadius: BorderRadius.circular(10),
+             borderRadius: BorderRadius.circular(20),
            ),
            key: Key('$index'),
              child: ListTile(
@@ -254,7 +254,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
             //  leading: boolAchieveReleaseFlg
             //      ? const Icon(Icons.play_circle, color: Colors.blue, size: 18,)
             //      : const Icon(Icons.stop_circle, size: 18,),
-            title: Text('${item['title']}  ', style: TextStyle(color: Colors.black , fontSize: 30),),
+            title: Text('${item['title']}  ', style: TextStyle(color: Colors.black , fontSize: 25),),
              subtitle: Row(children:  <Widget>[Text('$strTimeText ', style: TextStyle(color: Colors.grey , fontSize: 30) ), Text('$strOtherSideText', style: TextStyle(color: Colors.black , fontSize: 15),)] ),
             trailing: PopupMenuButton(
               itemBuilder: (context) {
