@@ -45,7 +45,7 @@ class _StretchScreenState extends State<StretchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title:  Text(title)),
+      appBar: AppBar(title:  Text(title),backgroundColor: const Color(0xFF6495ed),),
       body: SingleChildScrollView(
 
         child: Container(

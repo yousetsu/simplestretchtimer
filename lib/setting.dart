@@ -17,7 +17,7 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('設定')),
+      appBar: AppBar(title: const Text('設定'),backgroundColor: const Color(0xFF6495ed),),
       body: Column(
              // mainAxisAlignment: MainAxisAlignment.center,
 

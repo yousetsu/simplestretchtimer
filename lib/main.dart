@@ -62,10 +62,11 @@ class MyApp extends StatelessWidget {
         '/setting': (context) => const SettingScreen(),
       },
       theme: ThemeData(
-        primaryColor: const Color(0xFF191970),
-       // primaryColor: Colors.blue,
+       // primaryColor: const Color(0xFF191970),
+        primaryColor: Colors.blue,
         hintColor: const Color(0xFF2196f3),
         //canvasColor: Colors.black,
+      //  backgroundColor: const Color(0xFF191970),
           canvasColor: const Color(0xFFf8f8ff),
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue).copyWith(secondary: const Color(0xFF2196f3)),
           fontFamily: 'KosugiMaru',
@@ -111,7 +112,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('ストレッチタイマー')),
+      appBar: AppBar(title: const Text('ストレッチタイマー'),backgroundColor: const Color(0xFF6495ed),),
         body: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children:  <Widget>[
