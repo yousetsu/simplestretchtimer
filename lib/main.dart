@@ -68,6 +68,7 @@ class MyApp extends StatelessWidget {
         //canvasColor: Colors.black,
           canvasColor: const Color(0xFFf8f8ff),
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue).copyWith(secondary: const Color(0xFF2196f3)),
+          fontFamily: 'KosugiMaru',
       ),
       //didipop使うため
       navigatorObservers: [routeObserver],
