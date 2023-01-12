@@ -117,6 +117,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
               mainAxisAlignment: MainAxisAlignment.center,
               children:  <Widget>[
               //  _listHeader(),
+                Padding(padding: EdgeInsets.all(10)),
                 Expanded(
                   child: ReorderableListView(
            // ReorderableListView(
@@ -260,11 +261,11 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
 
            margin: const EdgeInsets.fromLTRB(15,0,15,15),
            shape: RoundedRectangleBorder(
-             borderRadius: BorderRadius.circular(20),
+             borderRadius: BorderRadius.circular(15),
            ),
            key: Key('$index'),
              child: ListTile(
-               contentPadding: EdgeInsets.all(20), //全方向に１０
+               contentPadding: EdgeInsets.all(10),
             //  key: Key('$index'),
             //tileColor: Colors.grey,
             // tileColor: (item['getupstatus'].toString() == cnsGetupStatusS)

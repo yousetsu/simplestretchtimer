@@ -62,15 +62,14 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
     }
     timer = Timer.periodic(Duration(seconds: 1), _onTimer);
   }
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(realDialogTitle),
+      title: Text(realDialogTitle, style: const TextStyle( color: Color(0xFF191970))),
       content: Row(
           children: <Widget>[
             Text(
-                '$strTime', style: TextStyle(fontSize: 30, color: Colors.blue)),
+                '$strTime', style: const TextStyle(fontSize: 30, color: Colors.blue)),
           ]),
       actions: <Widget>[
         TextButton(
@@ -107,19 +106,69 @@ _setupSession
   /*------------------------------------------------------------------
 通知
  -------------------------------------------------------------------*/
-  void notification() {
+  void notification(int state) {
     switch (notificationType) {
+      case cnsNotificationTypeNo:
+        //無し
+        break;
       case cnsNotificationTypeVib:
-        Vibration.vibrate(duration: 1000);
+        switch(state){
+          case cnsCountStateReady:
+            Vibration.vibrate(
+              pattern: [0,300,10,300],
+            );
+            break;
+          case cnsCountStateStretch:
+            Vibration.vibrate(duration: 1000);
+            break;
+          case cnsCountStateReadyOther:
+
+            Vibration.vibrate(
+              pattern: [0, 300,10,300],
+            );
+            break;
+          case cnsCountStateStretchOther:
+            Vibration.vibrate(duration: 1000);
+            break;
+        }
+
         break;
 
       case cnsNotificationTypeSE:
-        _player.setAsset('assets/audio/se01.mp3');
-        _player.play();
+        switch(state){
+          case cnsCountStateReady:
+            _player.setAsset('assets/audio/se01.mp3');
+            _player.play();
+            break;
+          case cnsCountStateStretch:
+            _player.setAsset('assets/audio/se02.mp3');
+            _player.play();
+            break;
+          case cnsCountStateReadyOther:
+            _player.setAsset('assets/audio/se01.mp3');
+            _player.play();
+            break;
+          case cnsCountStateStretchOther:
+            _player.setAsset('assets/audio/se02.mp3');
+            _player.play();
+            break;
+        }
         break;
-
       case cnsNotificationTypeVoice:
-      // Vibration.vibrate(duration: 1000);
+        switch(state){
+          case cnsCountStateReady:
+            //開始
+            break;
+          case cnsCountStateStretch:
+            //反対側・反対側準備
+            break;
+          case cnsCountStateReadyOther:
+            //開始
+            break;
+          case cnsCountStateStretchOther:
+            //終了
+            break;
+        }
         break;
     }
   }
@@ -191,7 +240,7 @@ _setupSession
     ///ストレッチ時間経過(0:ストレッチ準備、1:ストレッチ、2:ストレッチ準備 3:ストレッチ反対側)
     if (dtCntTimeSecond < 0) {
       debugPrint('時間経過！');
-      notification();
+      notification(countState);
 
       switch (countState) {
         case cnsCountStateReady:
