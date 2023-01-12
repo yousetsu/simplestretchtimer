@@ -230,7 +230,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
        debugPrint('no:${item['no']},title:${item['title']}');
       //反対側ありなし判定
       if( item['otherside'] == cnsOtherSideOn) {
-        strOtherSideText = 'ずつ';
+        strOtherSideText = '反対側';
       }else{
         strOtherSideText = '';
       }
@@ -246,6 +246,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
            ),
            key: Key('$index'),
              child: ListTile(
+               contentPadding: EdgeInsets.all(20), //全方向に１０
             //  key: Key('$index'),
             //tileColor: Colors.grey,
             // tileColor: (item['getupstatus'].toString() == cnsGetupStatusS)
@@ -255,7 +256,17 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
             //      ? const Icon(Icons.play_circle, color: Colors.blue, size: 18,)
             //      : const Icon(Icons.stop_circle, size: 18,),
             title: Text('${item['title']}  ', style: TextStyle(color: Colors.black , fontSize: 25),),
-             subtitle: Row(children:  <Widget>[Text('$strTimeText ', style: TextStyle(color: Colors.grey , fontSize: 30) ), Text('$strOtherSideText', style: TextStyle(color: Colors.black , fontSize: 15),)] ),
+             subtitle: Row(children:  <Widget>[
+               Text('  $strTimeText ', style:TextStyle(color: Colors.blue , fontSize: 20) ),
+               Container(
+                   //color: Colors.blue,
+                   decoration: BoxDecoration(
+                     color: Colors.blue,
+                     borderRadius: BorderRadius.circular(3),
+                   ) ,
+                   padding: EdgeInsets.all(5),
+                   child :Text('$strOtherSideText', style: TextStyle(color: Colors.white , fontSize: 15),))
+               ,Text('　　準備:00秒 ', style:TextStyle(color: Colors.grey , fontSize: 10) ),] ),
             trailing: PopupMenuButton(
               itemBuilder: (context) {
                 return lists.map((String list) {
@@ -278,7 +289,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
               },
             ),
 
-           // isThreeLine: true,
+            isThreeLine: true,
              selected: listNo == item['no'],
              onTap: () {
                listNo = item['no'];
