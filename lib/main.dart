@@ -61,6 +61,14 @@ class MyApp extends StatelessWidget {
         '/': (context) => const MainScreen(),
         '/setting': (context) => const SettingScreen(),
       },
+      theme: ThemeData(
+        //primaryColor: const Color(0xFF2196f3),
+        primaryColor: Colors.blue,
+        hintColor: const Color(0xFF2196f3),
+        //canvasColor: Colors.black,
+          canvasColor: const Color(0xFFf8f8ff),
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue).copyWith(secondary: const Color(0xFF2196f3)),
+      ),
       //didipop使うため
       navigatorObservers: [routeObserver],
     );
@@ -234,7 +242,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
       strTimeText = '${dtTime.minute.toString().padLeft(2,'0')}分${dtTime.second.toString().padLeft(2,'0')}秒';
 
        if (item['presecond'] > 0) {
-         strPreSecondText = '　準備:${item['presecond'].toString().padLeft(2,'0')}秒';
+         strPreSecondText = '　準備：${item['presecond'].toString()}秒';
        }else{
          strPreSecondText = '';
        }

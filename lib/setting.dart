@@ -17,11 +17,42 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('設定画面')),
-      body: SingleChildScrollView(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+      appBar: AppBar(title: const Text('設定')),
+      body: Column(
+             // mainAxisAlignment: MainAxisAlignment.center,
+
               children:  <Widget>[
+                Padding(padding: EdgeInsets.all(30)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.notification_add,color:Colors.blue,size:25),
+                    const Text(' 通知音の設定', style:TextStyle(fontSize: 25.0),),
+                  ],),
+                Container(
+                  margin: const EdgeInsets.fromLTRB(15,0,15,5),
+                  //padding: const EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black12,width: 2),
+                    borderRadius: BorderRadius.circular(20),
+                    //   color: Colors.lightBlueAccent,
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.white,
+                          blurRadius: 10.0,
+                          spreadRadius: 1.0,
+                          offset: Offset(5, 5))
+                    ],
+                  ),
+                  child:Column(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    children:  <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Radio(activeColor: Colors.blue, value: cnsNotificationTypeNo, groupValue: _type, onChanged: _handleRadio, autofocus:true,),
+                    const Text('なし', style:TextStyle(fontSize: 20.0),),
+                  ],),
                 Row(mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Radio(activeColor: Colors.blue, value: cnsNotificationTypeVib, groupValue: _type, onChanged: _handleRadio, autofocus:true,),
@@ -37,9 +68,10 @@ class _SettingScreenState extends State<SettingScreen> {
                     Radio(activeColor: Colors.blue, value: cnsNotificationTypeVoice, groupValue: _type, onChanged: _handleRadio, autofocus:false,),
                     const Text('声', style:TextStyle(fontSize: 20.0),),
                   ],),
+                ],),
+                ),
               ]
-          )
-      ),
+          ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 1,
         items: const <BottomNavigationBarItem>[
