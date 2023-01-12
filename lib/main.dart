@@ -216,10 +216,11 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
   Future<void> getItems() async {
     List<Widget> list = <Widget>[];
     int listNo = 0;
+    double titleFont = 25;
     String listTitle ='';
     String listTime ='';
     int listOtherSide = 0;
-    String strOtherSideText = '';
+    String strPreSecondText = '';
     String strTimeText = '';
     DateTime dtTime = DateTime.now();
     int listPreSecond = 0;
@@ -229,13 +230,20 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
     for (Map item in map_stretchlist) {
        debugPrint('no:${item['no']},title:${item['title']}');
       //反対側ありなし判定
-      if( item['otherside'] == cnsOtherSideOn) {
-        strOtherSideText = '反対側';
-      }else{
-        strOtherSideText = '';
-      }
       dtTime = DateTime.parse(item['time']);
       strTimeText = '${dtTime.minute.toString().padLeft(2,'0')}分${dtTime.second.toString().padLeft(2,'0')}秒';
+
+       if (item['presecond'] > 0) {
+         strPreSecondText = '　準備:${item['presecond'].toString().padLeft(2,'0')}秒';
+       }else{
+         strPreSecondText = '';
+       }
+
+       if(item['title'].toString().length > 15) {
+         titleFont = 15;
+       }else{
+         titleFont = 25;
+       }
 
       list.add(
          Card(
@@ -255,18 +263,11 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
             //  leading: boolAchieveReleaseFlg
             //      ? const Icon(Icons.play_circle, color: Colors.blue, size: 18,)
             //      : const Icon(Icons.stop_circle, size: 18,),
-            title: Text('${item['title']}  ', style: TextStyle(color: Colors.black , fontSize: 25),),
+            title: Text('${item['title']}  ', style: TextStyle(color: Colors.black , fontSize: titleFont),),
              subtitle: Row(children:  <Widget>[
-               Text('  $strTimeText ', style:TextStyle(color: Colors.blue , fontSize: 20) ),
-               Container(
-                   //color: Colors.blue,
-                   decoration: BoxDecoration(
-                     color: Colors.blue,
-                     borderRadius: BorderRadius.circular(3),
-                   ) ,
-                   padding: EdgeInsets.all(5),
-                   child :Text('$strOtherSideText', style: TextStyle(color: Colors.white , fontSize: 15),))
-               ,Text('　　準備:00秒 ', style:TextStyle(color: Colors.grey , fontSize: 10) ),] ),
+               Text('  $strTimeText ', style:TextStyle(color: Colors.blue , fontSize: 25) ),
+              Icon(Icons.swap_horiz,size: 25,color:  ( item['otherside'] == cnsOtherSideOn) ?Colors.blue:Colors.white,) ,
+               Text(strPreSecondText, style:TextStyle(color: Colors.grey , fontSize: 16) ),] ),
             trailing: PopupMenuButton(
               itemBuilder: (context) {
                 return lists.map((String list) {
