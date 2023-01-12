@@ -62,8 +62,8 @@ class MyApp extends StatelessWidget {
         '/setting': (context) => const SettingScreen(),
       },
       theme: ThemeData(
-        //primaryColor: const Color(0xFF2196f3),
-        primaryColor: Colors.blue,
+        primaryColor: const Color(0xFF191970),
+       // primaryColor: Colors.blue,
         hintColor: const Color(0xFF2196f3),
         //canvasColor: Colors.black,
           canvasColor: const Color(0xFFf8f8ff),
@@ -272,11 +272,11 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
             //  leading: boolAchieveReleaseFlg
             //      ? const Icon(Icons.play_circle, color: Colors.blue, size: 18,)
             //      : const Icon(Icons.stop_circle, size: 18,),
-            title: Text('${item['title']}  ', style: TextStyle(color: Colors.black , fontSize: titleFont),),
+            title: Text('${item['title']}  ', style: TextStyle(color: Color(0xFF191970) , fontSize: titleFont),),
              subtitle: Row(children:  <Widget>[
-               Text('  $strTimeText ', style:TextStyle(color: Colors.blue , fontSize: 25) ),
+               Text(' $strTimeText ', style:TextStyle(color: Colors.blue , fontSize: 25) ),
               Icon(Icons.swap_horiz,size: 25,color:  ( item['otherside'] == cnsOtherSideOn) ?Colors.blue:Colors.white,) ,
-               Text(strPreSecondText, style:TextStyle(color: Colors.grey , fontSize: 16) ),] ),
+               Text(strPreSecondText, style:TextStyle(color: Colors.grey , fontSize: 15) ),] ),
             trailing: PopupMenuButton(
               itemBuilder: (context) {
                 return lists.map((String list) {
@@ -299,7 +299,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
               },
             ),
 
-            isThreeLine: true,
+        //    isThreeLine: true,
              selected: listNo == item['no'],
              onTap: () {
                listNo = item['no'];

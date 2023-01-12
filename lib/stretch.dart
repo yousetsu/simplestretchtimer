@@ -71,7 +71,7 @@ class _StretchScreenState extends State<StretchScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children:  <Widget>[
               Icon(Icons.label,size: 25,color: Colors.blue),
-                Text('タイトル',style:TextStyle(fontSize: 25.0)),
+                Text('タイトル',style:TextStyle(fontSize: 25.0,color: Color(0xFF191970))),
                 ],),
 
                 Container(
@@ -111,7 +111,7 @@ class _StretchScreenState extends State<StretchScreen> {
                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Icon(Icons.timer,size: 25,color: Colors.blue),
-                    Text('時間（分秒）',style:TextStyle(fontSize: 25.0)),
+                    Text('時間（分秒）',style:TextStyle(fontSize: 25.0,color: Color(0xFF191970))),
                   ],
                 ),
                 ElevatedButton(
@@ -149,7 +149,7 @@ class _StretchScreenState extends State<StretchScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children:  <Widget>[
                 Icon(Icons.swap_horiz,size: 30,color: Colors.blue),
-                Text('反対側のストレッチ',style:TextStyle(fontSize: 25.0)),
+                Text('反対側のストレッチ',style:TextStyle(fontSize: 25.0,color: Color(0xFF191970))),
 
               ]),
                 Checkbox(
@@ -164,7 +164,7 @@ class _StretchScreenState extends State<StretchScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children:  <Widget>[
                           Icon(Icons.self_improvement,size: 30,color: Colors.blue),
-                          Text('準備時間(秒)',style:TextStyle(fontSize: 25.0)),
+                          Text('準備時間(秒)',style:TextStyle(fontSize: 25.0,color: Color(0xFF191970))),
                         ]),
                 Container(
                   padding: const EdgeInsets.all(5.0),

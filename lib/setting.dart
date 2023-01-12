@@ -27,7 +27,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Icon(Icons.notification_add,color:Colors.blue,size:25),
-                    const Text(' 通知音の設定', style:TextStyle(fontSize: 25.0),),
+                    const Text(' 通知音の設定', style:TextStyle(fontSize: 25.0,color: Color(0xFF191970)),),
                   ],),
                 Container(
                   margin: const EdgeInsets.fromLTRB(15,0,15,5),
