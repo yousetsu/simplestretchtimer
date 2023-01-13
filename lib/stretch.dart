@@ -4,6 +4,11 @@ import 'package:flutter_picker/flutter_picker.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 import './const.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
+RewardedAd? _rewardedAd;
+int rewardcnt = 0;
+
 class StretchScreen extends StatefulWidget {
   String mode = '';
   int no = 0;
@@ -41,6 +46,8 @@ class _StretchScreenState extends State<StretchScreen> {
   void initState() {
     super.initState();
      init();
+    _createRewardedAd();
+
   }
   @override
   Widget build(BuildContext context) {
@@ -178,10 +185,14 @@ class _StretchScreenState extends State<StretchScreen> {
                     key: _formPreSecondKey,
                     child: TextFormField(
                       controller: _textControllerPreSecond,
+
                       validator: (value) {
-                        if (value != null) {
-                          if (int.parse(value) > 59 || int.parse(value) < 0) {
-                            return '0-59まで';
+                        debugPrint('value:$value');
+                        if (value != null ) {
+                          if(value.isNotEmpty){
+                            if (int.parse(value) > 59 || int.parse(value) < 0) {
+                              return '0-59まで';
+                            }
                           }
                         }
                         return null;
@@ -190,7 +201,6 @@ class _StretchScreenState extends State<StretchScreen> {
                       style: const TextStyle(fontSize: 25, color: Colors.white,),
                       textAlign: TextAlign.center,
                       maxLength: 2,
-
                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
                   ),
@@ -240,6 +250,7 @@ class _StretchScreenState extends State<StretchScreen> {
     switch (mode) {
     //登録モード
       case cnsStretchScreenIns:
+        _showRewardedAd();
         intMax =  await getMaxStretchNo();
         await insertStretchData(intMax+1);
         break;
@@ -251,12 +262,13 @@ class _StretchScreenState extends State<StretchScreen> {
 
     Navigator.pop(context);
   }
-  void init(){
+  Future<void> init()async{
     switch (mode) {
     //登録モード
       case cnsStretchScreenIns:
         title = '登録画面';
         buttonName  = '登録';
+        rewardcnt = await _loadRewardCnt();
         break;
     //編集モード
       case cnsStretchScreenUpd:
@@ -344,5 +356,68 @@ class _StretchScreenState extends State<StretchScreen> {
     }
     return lcMaxNo;
   }
+  /*------------------------------------------------------------------
+動画準備
+ -------------------------------------------------------------------*/
+  void _createRewardedAd() {
+    RewardedAd.load(
+        adUnitId: strCnsRewardID,
+        request: const AdRequest(),
+        rewardedAdLoadCallback: RewardedAdLoadCallback(
+          onAdLoaded: (RewardedAd ad) {
+            //  print('$ad loaded.');
+            _rewardedAd = ad;
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            //  print('RewardedAd failed to load: $error');
+            _rewardedAd = null;
+          },
+        ));
 
+  }
+  /*------------------------------------------------------------------
+動画実行
+ -------------------------------------------------------------------*/
+  void _showRewardedAd() async {
+    rewardcnt++;
+    if(rewardcnt >= 3 ) {
+      _rewardedAd!.setImmersiveMode(true);
+      _rewardedAd!.show(
+          onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
+            print('$ad with reward $RewardItem(${reward.amount}, ${reward
+                .type})');
+          });
+      _rewardedAd = null;
+      rewardcnt = 0;
+      await _updRewardCnt(rewardcnt);
+    }else{
+      await _updRewardCnt(rewardcnt);
+    }
+  }
+  //-------------------------------------------------------------
+//   リワード回数を取得
+//-------------------------------------------------------------
+  Future<int> _loadRewardCnt() async {
+    int rewardcnt = 0;
+    String dbPath = await getDatabasesPath();
+    String path = p.join(dbPath, 'internal_assets.db');
+    Database database = await openDatabase(path, version: 1);
+    List<Map> result = await database.rawQuery("SELECT rewardcnt From setting  limit 1");
+    for (Map item in result) {
+      setState(() {rewardcnt = item['rewardcnt'];});
+    }
+    return rewardcnt;
+  }
+  //-------------------------------------------------------------
+//   リワード回数を更新
+//-------------------------------------------------------------
+  Future<void> _updRewardCnt(int rewardCnt) async {
+    String dbPath = await getDatabasesPath();
+    String path = p.join(dbPath, 'internal_assets.db');
+    Database database = await openDatabase(path, version: 1);
+    String query = "UPDATE setting set rewardcnt = '$rewardCnt' ";
+    await database.transaction((txn) async {
+      await txn.rawInsert(query);
+    });
+  }
 }
