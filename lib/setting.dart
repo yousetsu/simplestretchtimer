@@ -2,12 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as p;
 import './const.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key); //コンストラクタ
   @override
   State<SettingScreen> createState() =>  _SettingScreenState();
 }
 class _SettingScreenState extends State<SettingScreen> {
+  //バナー広告初期化
+  final BannerAd myBanner = BannerAd(
+    adUnitId : strCnsBannerID,
+    size: AdSize.banner,
+    request: const AdRequest(),
+    listener: BannerAdListener(
+      onAdLoaded: (Ad ad) => print('バナー広告がロードされました'),
+      // Called when an ad request failed.
+      onAdFailedToLoad: (Ad ad, LoadAdError error) {
+        // Dispose the ad here to free resources.
+        ad.dispose();
+        //  print('バナー広告の読み込みが次の理由で失敗しました: $error');
+      },
+      // Called when an ad opens an overlay that covers the screen.
+      onAdOpened: (Ad ad) => print('バナー広告が開かれました'),
+      // Called when an ad removes an overlay that covers the screen.
+      onAdClosed: (Ad ad) => print('バナー広告が閉じられました'),
+      // Called when an impression occurs on the ad.
+      onAdImpression: (Ad ad) => print('Ad impression.'),
+    ),
+  );
   int? _type = cnsNotificationTypeVib;
   @override
   void initState() {
@@ -16,6 +39,15 @@ class _SettingScreenState extends State<SettingScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    //動画バナーロード
+    myBanner.load();
+    final AdWidget adWidget = AdWidget(ad: myBanner);
+    final Container adContainer = Container(
+      alignment: Alignment.center,
+      width: myBanner.size.width.toDouble(),
+      height: myBanner.size.height.toDouble(),
+      child: adWidget,
+    );
     return Scaffold(
       appBar: AppBar(title: const Text('設定'),backgroundColor: const Color(0xFF6495ed),),
       body: Column(
@@ -70,7 +102,9 @@ class _SettingScreenState extends State<SettingScreen> {
                 //   ],),
                 ],),
                 ),
-              ]
+                adContainer,
+              ],
+
           ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 1,
