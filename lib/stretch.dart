@@ -89,12 +89,8 @@ class _StretchScreenState extends State<StretchScreen> {
                     child: TextFormField(
                       controller: _textControllerTitle,
                       validator: (value) {
-                        debugPrint('title $value');
-
                         if (value == null  || value.isEmpty) {
                           return '必ず何か入力してください。';
-                        // }else if(value.toString().length > 60.0){
-                        //   return '全角３０文字までです';
                         }
                         return null;
                       },
@@ -102,11 +98,8 @@ class _StretchScreenState extends State<StretchScreen> {
                       style: const TextStyle(fontSize: 20, color: Colors.white,),
                       textAlign: TextAlign.center,
                       onFieldSubmitted: (String value){
-
                       },
                       maxLength: 20,
-
-                   //   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
                   ),
                 ),
@@ -117,7 +110,7 @@ class _StretchScreenState extends State<StretchScreen> {
                  mainAxisAlignment: MainAxisAlignment.center,
                   children: const <Widget>[
                      Icon(Icons.timer,size: 25,color: Colors.blue),
-                     Text('時間（分秒）',style:TextStyle(fontSize: 25.0,color: Color(0xFF191970))),
+                     Text('時間',style:TextStyle(fontSize: 25.0,color: Color(0xFF191970))),
                   ],
                 ),
                 ElevatedButton(
@@ -138,7 +131,6 @@ class _StretchScreenState extends State<StretchScreen> {
                         onConfirm: (Picker picker, List value) {
                           setState(() => {
                             _time = DateTime.utc(2016, 5, 1, 0,value[0], value[1]),
-                           // _saveStrSetting('goalgetuptime',_goalgetuptime.toString()),
                           });
                         },
                         onSelect: (Picker picker, int index, List<int> selected){
@@ -170,12 +162,12 @@ class _StretchScreenState extends State<StretchScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children:  <Widget>[
                           Icon(Icons.self_improvement,size: 30,color: Colors.blue),
-                          Text('準備時間(秒)',style:TextStyle(fontSize: 25.0,color: Color(0xFF191970))),
+                          Text('準備時間(0～59秒)',style:TextStyle(fontSize: 25.0,color: Color(0xFF191970))),
                         ]),
                 Container(
                   padding: const EdgeInsets.all(5.0),
                   alignment: Alignment.bottomCenter,
-                  width: 70.0,
+                  width: 120.0,
                   height: 70,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.lightBlueAccent),
@@ -187,10 +179,10 @@ class _StretchScreenState extends State<StretchScreen> {
                     child: TextFormField(
                       controller: _textControllerPreSecond,
                       validator: (value) {
-                        if (value != null && value.isEmpty) {
-                          return '何か入力してください';
-                        }else if(int.parse(value!) > 59){
-                          return '最高59秒までです';
+                        if (value != null) {
+                          if (int.parse(value) > 59 || int.parse(value) < 0) {
+                            return '0-59まで';
+                          }
                         }
                         return null;
                       },
@@ -198,6 +190,7 @@ class _StretchScreenState extends State<StretchScreen> {
                       style: const TextStyle(fontSize: 25, color: Colors.white,),
                       textAlign: TextAlign.center,
                       maxLength: 2,
+
                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
                   ),
@@ -227,15 +220,24 @@ class _StretchScreenState extends State<StretchScreen> {
     );
   }
   void buttonPressed() async{
-    if (!_formTitleKey.currentState!.validate()) {
+    if (!_formTitleKey.currentState!.validate() || !_formPreSecondKey.currentState!.validate()) {
       // If the form is valid, display a snackbar. In the real world,
       // you'd often call a server or save the information in a database.
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('入力内容に足りない項目があります'),
+        content: Text('入力内容を見直してください'),
         backgroundColor: Colors.red,
       ));
       return;
     }
+    if (_time.minute == 0 && _time.second == 0){
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('必ず時間（分秒）を設定してください。'),
+          backgroundColor: Colors.red,
+      ));
+      return;
+  }
+
+
     int intMax = 0;
     switch (mode) {
     //登録モード
