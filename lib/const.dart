@@ -20,5 +20,5 @@ const int cnsCountStateStretchOther          = 3; ///ストレッチ（反対側
 const String strCnsBannerID = 'ca-app-pub-3940256099942544/6300978111'; //Banner
 const String strCnsRewardID = 'ca-app-pub-3940256099942544/5224354917'; //Reward
 //本番
-//const String strCnsBannerID = 'ca-app-pub-8759269867859745/5600329979'; //banner
-//const String strCnsRewardID = 'ca-app-pub-8759269867859745/8814199565'; //Reward
+//const String strCnsBannerID = 'ca-app-pub-8759269867859745/2016946210'; //banner
+//const String strCnsRewardID = 'ca-app-pub-8759269867859745/9736240868'; //Reward
