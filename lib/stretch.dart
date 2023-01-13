@@ -117,7 +117,7 @@ class _StretchScreenState extends State<StretchScreen> {
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.lightBlueAccent,
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 50),
+                    padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),),
@@ -236,8 +236,6 @@ class _StretchScreenState extends State<StretchScreen> {
       ));
       return;
   }
-
-
     int intMax = 0;
     switch (mode) {
     //登録モード
