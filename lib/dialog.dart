@@ -240,7 +240,6 @@ _setupSession
 
     ///ストレッチ時間経過(0:ストレッチ準備、1:ストレッチ、2:ストレッチ準備 3:ストレッチ反対側)
     if (dtCntTimeSecond < 0) {
-      debugPrint('時間経過！');
       notification(countState);
 
       switch (countState) {

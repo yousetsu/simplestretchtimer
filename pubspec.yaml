@@ -18,6 +18,7 @@ dependencies:
   intl: ^0.18.0
   just_audio: ^0.9.31
   vibration: ^1.7.6
+  flutter_launcher_icons: ^0.11.0
 
 dev_dependencies:
   flutter_test:
@@ -36,3 +37,7 @@ flutter:
     - family: KosugiMaru
       fonts:
         - asset: assets/fonts/KosugiMaru-Regular.ttf
+
+flutter_icons:
+  android: true
+  image_path: "assets/stretchTimerIcon.png"
