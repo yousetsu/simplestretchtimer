@@ -63,11 +63,11 @@ class _SettingScreenState extends State<SettingScreen> {
                     Radio(activeColor: Colors.blue, value: cnsNotificationTypeSE, groupValue: _type, onChanged: _handleRadio, autofocus:false,),
                     const Text('音', style:TextStyle(fontSize: 20.0),),
                   ],),
-                Row(mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Radio(activeColor: Colors.blue, value: cnsNotificationTypeVoice, groupValue: _type, onChanged: _handleRadio, autofocus:false,),
-                    const Text('声', style:TextStyle(fontSize: 20.0),),
-                  ],),
+                // Row(mainAxisAlignment: MainAxisAlignment.start,
+                //   children: <Widget>[
+                //     Radio(activeColor: Colors.blue, value: cnsNotificationTypeVoice, groupValue: _type, onChanged: _handleRadio, autofocus:false,),
+                //     const Text('声', style:TextStyle(fontSize: 20.0),),
+                //   ],),
                 ],),
                 ),
               ]

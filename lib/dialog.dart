@@ -154,22 +154,23 @@ _setupSession
             break;
         }
         break;
-      case cnsNotificationTypeVoice:
-        switch(state){
-          case cnsCountStateReady:
-            //開始
-            break;
-          case cnsCountStateStretch:
-            //反対側・反対側準備
-            break;
-          case cnsCountStateReadyOther:
-            //開始
-            break;
-          case cnsCountStateStretchOther:
-            //終了
-            break;
-        }
-        break;
+        //ボイスモード一旦なし
+      // case cnsNotificationTypeVoice:
+      //   switch(state){
+      //     case cnsCountStateReady:
+      //       //開始
+      //       break;
+      //     case cnsCountStateStretch:
+      //       //反対側・反対側準備
+      //       break;
+      //     case cnsCountStateReadyOther:
+      //       //開始
+      //       break;
+      //     case cnsCountStateStretchOther:
+      //       //終了
+      //       break;
+      //   }
+      //   break;
     }
   }
 
