@@ -98,7 +98,7 @@ class _StretchScreenState extends State<StretchScreen> {
                         }
                         return null;
                       },
-                       decoration: InputDecoration(hintText: "タイトルを入力してください"),
+                       decoration: const InputDecoration(hintText: "タイトルを入力してください"),
                       style: const TextStyle(fontSize: 20, color: Colors.white,),
                       textAlign: TextAlign.center,
                       onFieldSubmitted: (String value){
@@ -111,13 +111,13 @@ class _StretchScreenState extends State<StretchScreen> {
                   ),
                 ),
 
-                Padding(padding: EdgeInsets.all(10)),
+                const Padding(padding: EdgeInsets.all(10)),
                 ///時間
                 Row(
                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(Icons.timer,size: 25,color: Colors.blue),
-                    Text('時間（分秒）',style:TextStyle(fontSize: 25.0,color: Color(0xFF191970))),
+                  children: const <Widget>[
+                     Icon(Icons.timer,size: 25,color: Colors.blue),
+                     Text('時間（分秒）',style:TextStyle(fontSize: 25.0,color: Color(0xFF191970))),
                   ],
                 ),
                 ElevatedButton(
@@ -149,11 +149,11 @@ class _StretchScreenState extends State<StretchScreen> {
                   child: Text('${_time.minute.toString().padLeft(2,'0')}分${_time.second.toString().padLeft(2,'0')}秒', style: const TextStyle(fontSize: 30),),
                 ),
                 ///左右上下反対側のストレッチ
-                Padding(padding: EdgeInsets.all(10)),
+                const Padding(padding: EdgeInsets.all(10)),
 
           Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children:  <Widget>[
+              children: const  <Widget>[
                 Icon(Icons.swap_horiz,size: 30,color: Colors.blue),
                 Text('反対側のストレッチ',style:TextStyle(fontSize: 25.0,color: Color(0xFF191970))),
 
