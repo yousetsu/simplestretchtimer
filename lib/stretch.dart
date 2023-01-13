@@ -89,7 +89,9 @@ class _StretchScreenState extends State<StretchScreen> {
                     child: TextFormField(
                       controller: _textControllerTitle,
                       validator: (value) {
-                        if (value != null && value.isEmpty) {
+                        debugPrint('title $value');
+
+                        if (value == null  || value.isEmpty) {
                           return '必ず何か入力してください。';
                         // }else if(value.toString().length > 60.0){
                         //   return '全角３０文字までです';
@@ -99,7 +101,11 @@ class _StretchScreenState extends State<StretchScreen> {
                        decoration: InputDecoration(hintText: "タイトルを入力してください"),
                       style: const TextStyle(fontSize: 20, color: Colors.white,),
                       textAlign: TextAlign.center,
-                      maxLength: 30,
+                      onFieldSubmitted: (String value){
+
+                      },
+                      maxLength: 20,
+
                    //   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
                   ),
@@ -221,7 +227,15 @@ class _StretchScreenState extends State<StretchScreen> {
     );
   }
   void buttonPressed() async{
-
+    if (!_formTitleKey.currentState!.validate()) {
+      // If the form is valid, display a snackbar. In the real world,
+      // you'd often call a server or save the information in a database.
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('入力内容に足りない項目があります'),
+        backgroundColor: Colors.red,
+      ));
+      return;
+    }
     int intMax = 0;
     switch (mode) {
     //登録モード
@@ -296,7 +310,7 @@ class _StretchScreenState extends State<StretchScreen> {
     }
 
     //準備時間がnullだったらゼロにする
-    preSecond = (_textControllerPreSecond.text == null)? 0:int.parse(_textControllerPreSecond.text);
+    preSecond = (_textControllerPreSecond.text.isEmpty)? 0:int.parse(_textControllerPreSecond.text);
 
     query = 'INSERT INTO stretchlist(no,title,time,otherside,presecond,kaku1,kaku2,kaku3,kaku4) values($lcNo,"${_textControllerTitle.text}","${_time.toString()}",$lcOtherSide,"$preSecond",null,null,null,null) ';
     await database.transaction((txn) async {
@@ -315,7 +329,6 @@ class _StretchScreenState extends State<StretchScreen> {
     }
     lcPreSecond =  int.parse(_textControllerPreSecond.text);
     query = "UPDATE stretchlist set title = '${_textControllerTitle.text}', time = '${_time.toString()}',otherside = $lcOtherSide, presecond = ${lcPreSecond} where no = $lcNo ";
-    debugPrint(query);
      await database.transaction((txn) async {
       await txn.rawInsert(query);
     });

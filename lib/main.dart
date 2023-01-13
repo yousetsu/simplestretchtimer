@@ -106,7 +106,6 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
   @override
   void didPopNext() {
     // 再描画
-    debugPrint("didpop");
     init();
   }
   @override
@@ -158,7 +157,6 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
   }
   void changeList(int oldDbNo, int newDbNo) async{
 
-    debugPrint('DBno  oldDbNo:$oldDbNo   newDbNo:$newDbNo');
     await changeListUpd(oldDbNo,newDbNo);
     await loadList();
     await getItems();
@@ -174,7 +172,6 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
 
   }
   Future<void> updListNo( int whereNo ,int updNo)async{
-    debugPrint('where:$whereNo upd:$updNo');
     String dbPath = await getDatabasesPath();
     String query = '';
     String path = p.join(dbPath, 'internal_assets.db');
@@ -239,7 +236,6 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
 
     int index = 0;
     for (Map item in map_stretchlist) {
-       debugPrint('no:${item['no']},title:${item['title']}');
       //反対側ありなし判定
       dtTime = DateTime.parse(item['time']);
       strTimeText = '${dtTime.minute.toString().padLeft(2,'0')}分${dtTime.second.toString().padLeft(2,'0')}秒';
@@ -250,7 +246,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
          strPreSecondText = '';
        }
 
-       if(item['title'].toString().length > 15) {
+       if(item['title'].toString().length > 10) {
          titleFont = 15;
        }else{
          titleFont = 25;
@@ -289,7 +285,6 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
                 }).toList();
               },
               onSelected: (String list) {
-                debugPrint(list);
                 switch (list) {
                   case '編集':
                     updStretch(item['no']);
@@ -341,11 +336,8 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
  -------------------------------------------------------------------*/
   void init() async {
     // await  testEditDB();
-    debugPrint("loadList");
     await loadList();
-    debugPrint("getItems");
     await getItems();
-    debugPrint("getNotificationType");
     notificationType = await getNotificationType();
   }
   /*------------------------------------------------------------------
