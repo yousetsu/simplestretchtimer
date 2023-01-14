@@ -119,14 +119,13 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
                 const Padding(padding: EdgeInsets.all(10)),
                 Expanded(
                   child: ReorderableListView(
-           // ReorderableListView(
                     onReorder: (int oldIndex, int newIndex) {
                       setState(() {
                         if (oldIndex < newIndex) {
                           newIndex -= 1;
                         }
-                        Widget _itemDummy = _items.removeAt(oldIndex);
-                        _items.insert(newIndex, _itemDummy);
+                        Widget itemDummy = _items.removeAt(oldIndex);
+                        _items.insert(newIndex, itemDummy);
                       });
                       //入れ替えロジック
                       changeList(oldIndex+1,newIndex+1);
