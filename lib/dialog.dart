@@ -60,7 +60,7 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
       dtCntTime = DateTime.parse(aweDialogTime);
       dtCntTimeSecond = dtCntTime.minute * 60 + dtCntTime.second;
     }
-    timer = Timer.periodic(Duration(seconds: 1), _onTimer);
+    timer = Timer.periodic(const Duration(seconds: 1), _onTimer);
   }
   @override
   Widget build(BuildContext context) {
@@ -69,14 +69,14 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
       content: Row(
           children: <Widget>[
             Text(
-                '$strTime', style: const TextStyle(fontSize: 30, color: Colors.blue)),
+                strTime, style: const TextStyle(fontSize: 30, color: Colors.blue)),
           ]),
       actions: <Widget>[
         TextButton(
-            child: Text('一時停止'),
+            child: const Text('一時停止'),
             onPressed: () => resultAlert('pause')),
         TextButton(
-            child: Text('中止'),
+            child: const Text('中止'),
             onPressed: () => resultAlert('stop')),
       ],
     );
