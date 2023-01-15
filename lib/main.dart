@@ -269,11 +269,11 @@ class _MainScreenState extends State<MainScreen> with RouteAware {
             //  leading: boolAchieveReleaseFlg
             //      ? const Icon(Icons.play_circle, color: Colors.blue, size: 18,)
             //      : const Icon(Icons.stop_circle, size: 18,),
-            title: Text('${item['title']}  ', style: TextStyle(color: Color(0xFF191970) , fontSize: titleFont),),
+            title: Text('${item['title']}  ', style: TextStyle(color: const Color(0xFF191970) , fontSize: titleFont),),
              subtitle: Row(children:  <Widget>[
-               Text(' $strTimeText ', style:TextStyle(color: Colors.blue , fontSize: 25) ),
+               Text(' $strTimeText ', style:const TextStyle(color: Colors.blue , fontSize: 25) ),
               Icon(Icons.swap_horiz,size: 25,color:  ( item['otherside'] == cnsOtherSideOn) ?Colors.blue:Colors.white,) ,
-               Text(strPreSecondText, style:TextStyle(color: Colors.grey , fontSize: 15) ),] ),
+               Text(strPreSecondText,  style: const TextStyle(color: Colors.grey , fontSize: 15) ),] ),
             trailing: PopupMenuButton(
               itemBuilder: (context) {
                 return lists.map((String list) {
