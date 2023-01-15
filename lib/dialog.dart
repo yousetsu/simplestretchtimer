@@ -270,7 +270,7 @@ _setupSession
 
     ///カウントダウン処理
     if (playFlg) {
-      dtCntTime = dtCntTime.subtract(Duration(seconds: 1));
+      dtCntTime = dtCntTime.subtract( const Duration(seconds: 1));
       dtCntTimeSecond--;
     }
 
