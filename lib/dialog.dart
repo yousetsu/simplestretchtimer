@@ -4,6 +4,7 @@ import 'package:vibration/vibration.dart';
 import './const.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:wakelock/wakelock.dart';
 
 late AudioPlayer _player;
 ///*------------------------------------------------------------------
@@ -46,6 +47,9 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
     //通知モードがバイブレーションならセットアップしない
     if (notificationType != cnsNotificationTypeVib) {
       _setupSession();
+      // 自動スリープを無効にする.
+      Wakelock.enable();
+
     }
 
     //初期の状態セット
@@ -90,6 +94,8 @@ class _AwesomeDialogState extends State<AwesomeDialog> {
           break;
         case 'stop':
           timer?.cancel();
+          // 自動スリープを有効にする.(通常は常に、この状態になっています)
+          Wakelock.disable();
           Navigator.pop(context);
           break;
       }
@@ -195,6 +201,8 @@ _setupSession
   void stretchEnd() {
     if (aweDialogOtherSide == cnsOtherSideOff) {
       timer?.cancel();
+      // 自動スリープを有効にする.(通常は常に、この状態になっています)
+      Wakelock.disable();
       Navigator.pop(context);
     }else{
       if(aweDialogPreSecond > 0) {
@@ -258,6 +266,8 @@ _setupSession
         case cnsCountStateStretchOther:
           dtCntTime = DateTime(0,0,0,0,0);
           timer?.cancel();
+          // 自動スリープを有効にする.(通常は常に、この状態になっています)
+          Wakelock.disable();
           Navigator.pop(context);
           break;
       }
