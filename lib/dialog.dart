@@ -16,7 +16,7 @@ class AwesomeDialog extends StatefulWidget {
   int dialogOtherSide = 0;
   int dialogPreSecond = 0;
   int dialognotificationType = 0;
-  AwesomeDialog(this.dialogTitle, this.dialogTime ,this.dialogOtherSide,this.dialogPreSecond,this.dialognotificationType);
+  AwesomeDialog(this.dialogTitle, this.dialogTime ,this.dialogOtherSide,this.dialogPreSecond,this.dialognotificationType, {super.key});
 
   @override
   _AwesomeDialogState createState() => _AwesomeDialogState(dialogTitle, dialogTime ,dialogOtherSide,dialogPreSecond,dialognotificationType);
@@ -107,7 +107,7 @@ _setupSession
   Future<void> _setupSession() async {
     _player = AudioPlayer();
     final session = await AudioSession.instance;
-    await session.configure(AudioSessionConfiguration.speech());
+    await session.configure( const AudioSessionConfiguration.speech());
   }
   /*------------------------------------------------------------------
 通知
@@ -230,7 +230,7 @@ _setupSession
   /*------------------------------------------------------------------
 ストレッチ終了
  -------------------------------------------------------------------*/
-  void ReadyOtherEnd() {
+  void readyOtherEnd() {
     //次の状態はストレッチ反対側
     countState = cnsCountStateStretchOther;
 
@@ -260,7 +260,7 @@ _setupSession
           break;
 
         case cnsCountStateReadyOther:
-          ReadyOtherEnd();
+          readyOtherEnd();
           break;
 
         case cnsCountStateStretchOther:
